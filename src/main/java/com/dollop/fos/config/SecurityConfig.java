@@ -35,6 +35,8 @@ public class SecurityConfig {
    private String permitAll[]= {
 			"/api/v1/auth/signup",
 			"/api/v1/auth/login",
+			"/api/v1/otp/checkOTP",
+			"/api/v1/emailAPI/sentEmail",
 	        };
    private String admin[]= {
 		                      "/api/v1/admin/RestaurantApprove/{restId}",
@@ -45,13 +47,20 @@ public class SecurityConfig {
 		                      "/api/v1/admin/UnVerify/{pn}/{ps}/{sortBy}",
 		                      "/api/v1/admin/UnBlock/{pn}/{ps}/{sortBy}",
 		                      "/api/v1/admin/Block/{pn}/{ps}/{sortBy}",
+		                      "/api/v1/admin/AllFood/{pn}/{ps}/{sortBy}",
+		                      "/api/v1/admin/AllActiveFood/{pn}/{ps}/{sortBy}",
+		                      "/api/v1/admin/AllInActiveFood/{pn}/{ps}/{sortBy}"
                             };
    private String owner[]= {
 			              "/api/v1/rest/save",
 			              "/api/v1/rest/address/{restId}",
 			              "/api/v1/category/save",
+
 			              "/api/v1/category/update",
 			              
+
+			              "/api/v1/food/save",
+
 	                       };
  
    

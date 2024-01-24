@@ -2,6 +2,7 @@ package com.dollop.fos.service;
 
 import org.springframework.http.ResponseEntity;
 
+import com.dollop.fos.requests.AddFoodRequest;
 import com.dollop.fos.requests.RestaurantRequest;
 
 
@@ -17,5 +18,7 @@ public interface IAdminService {
     public ResponseEntity<?> viewAllUnVerifiedRestaurant(int pageNo,int pageSize,String sortBy,RestaurantRequest request);
     public ResponseEntity<?> viewAllUnBlockRestaurant(int pageNo,int pageSize,String sortBy,RestaurantRequest request);
     public ResponseEntity<?> viewAllBlockRestaurant(int pageNo,int pageSize,String sortBy,RestaurantRequest request);
-    
+    public ResponseEntity<?> viewAllFood(int pageNo,int pageSize,String sortBy,AddFoodRequest request);
+	public ResponseEntity<?> viewAllActiveFood(int pageNo,int pageSize,String sortBy,AddFoodRequest request);
+	public ResponseEntity<?> viewAllInActiveFood(int pageNo,int pageSize,String sortBy,AddFoodRequest request);
 } 
