@@ -9,8 +9,8 @@ public class AppConstant {
 	public static final String RESTAURANT_FOUND = "Restaurant Already Exist...!!";
 	public static final String RESTAURANT_NOT_FOUND = "Restaurant Not Found....!!";
 	public static final String CATEGORY_NOT_FOUND = "Category Not Found....!!";
-//	public static final String FOOD_NOT_FOUND = "food not found...!!";
-//	public static final String FOUND_FOUND = "Food Already Exist...!!";
+	public static final String FOOD_NOT_FOUND = "food not found...!!";
+	public static final String FOUND_FOUND = "Food Already Exist...!!";
 //	public static final String TABLE_ALREADY_EXIST = "Table Already Exists...!!";
 //	public static final String TABLE_NOT_FOUND = "Table Not Found...!!";
 //	public static final String TABLE_NO_EXIST = "This No Table Already Exist take anoher no...!!";
@@ -18,10 +18,10 @@ public class AppConstant {
 //	public static final String CUSTOMER_NOT_FOUND = "Customer Not Found...!!";
 //	public static final String CART_EXIST = "This User Cart Already Exist...!!";
 //	public static final String CART_ISEMPTY = "Your Cart Is Empty...!!";
-//	public static final String DUPLICATE_EMAIL = "this Email is already Registered.....";
-//	public static final String NO_VALUE_PRESENT = "No Value Present in this object...!!";
-//	public static final String INCARRECT_EMAIL_EXCEPTION = "Your Email Address incorrect...!!";
-//	public static final String OTP_TIME_EXPIRE = "your OTP time is expire now please regenerate OTP...!!";
+	public static final String DUPLICATE_EMAIL = "this Email is already Registered.....";
+	public static final String NO_VALUE_PRESENT = "No Value Present in this object...!!";
+	public static final String INCARRECT_EMAIL_EXCEPTION = "Your Email Address incorrect...!!";
+	public static final String OTP_TIME_EXPIRE = "your OTP time is expire now please regenerate OTP...!!";
 //	public static final String TABLE_BOOKED_ALREADY = "Table aready booking...!!";
 //	public static final String DATA_NOT_FOUND = "Data Not Found...!!";
 	public static final String CATEGORY__FOUND = "Category Already Exist...!!";
@@ -40,7 +40,7 @@ public class AppConstant {
 //	public static final String RESTAURANT_DELETE_FAILED = "Restaurant Deletion Failed..!!";
 //	public static final Object TABLE_SAVE_SUCCESSFULLY = "Table Added Successfully..!!";
 	public static final Object CATEGORY_ADD_SUCCESS = "Category Added Successfully..!!";
-//	public static final Object FOOD_ADD_SUCCESS = "Food Added Successfully..!!";
+	public static final Object FOOD_ADD_SUCCESS = "Food Added Successfully..!!";
 //	public static final Object SUCCESSFULL_ADD_TO_CART = "Item Added Successfully..!!";
 //	public static final Object QUANTITY_INCREASE = "Item Quantity Increase..!!";
 //	public static final Object WAIT_FOR_CONFIRMATION = "waiting for Admin Approval..!!";
@@ -71,7 +71,7 @@ public class AppConstant {
 //	public static final String PASSWORD_CHANGED="Your password is changed successfuly...!!";
 //	// COMMAN
 //
-//	public static final Long OTP_TIME_DIFERENCE = (long) 5;
+	public static final Long OTP_TIME_DIFERENCE = (long) 5;
 //	public static final Object REST_UNDO_SUCCESS = "UNDO RESTAURANT...!!";
 //	public static final Object SERVER_ERROR = "Something Went Wrong..!!";
 //
@@ -107,6 +107,7 @@ public class AppConstant {
     public static final String RESTAURANT_UNBLOCK_SUCCESSFULLY="Restauant Already Unblock..!!";
 	public static final Object REST_ALREADY_UNVERIFIED = "Restaurant Already UnVerified..!!";
 	public static final Object RESTAURANT_UNVERIFIED_SUCCESSFULLY = "Restaurant UnVerified Success..!!";
+	public static final String EMAIL_ALREADY_REGISTERED = "1231";
 	
 	
 	

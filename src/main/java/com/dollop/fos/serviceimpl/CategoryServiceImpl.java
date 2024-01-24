@@ -2,6 +2,7 @@ package com.dollop.fos.serviceimpl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class CategoryServiceImpl implements ICategoryService {
 		Map<String,Object > response = new HashMap<>();
 		Category c = this.setCatData(category);
 		Category c2 = this.crepo.findBycatNameAndRestId(c.getCatName(), category.getRestId());
-		if(c2!=null) 
+		if(Objects.nonNull(c2)) 
 		{
 			response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.CATEGORY__FOUND);
 			return ResponseEntity.status(HttpStatus.OK).body(response);

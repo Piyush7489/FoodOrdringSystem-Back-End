@@ -23,8 +23,7 @@ import lombok.Setter;
 @Entity
 public class Food {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long foodId;
+	private String foodId;
 	private String foodName;
 	private Long foodPrice;
 	private String foodCreatedAt;
