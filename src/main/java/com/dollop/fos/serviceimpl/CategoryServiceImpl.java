@@ -92,7 +92,7 @@ public class CategoryServiceImpl implements ICategoryService {
 		}else {
 			System.err.println("NAME NOT BE SAME");
 			if(Objects.nonNull(findBycatNameAndRestId))
-			{
+			{ 
 				System.err.println(findBycatNameAndRestId);
 				response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.CATEGORY__FOUND);
 		        return ResponseEntity.status(HttpStatus.OK).body(response);

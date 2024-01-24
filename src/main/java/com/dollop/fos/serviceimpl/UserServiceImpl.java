@@ -53,7 +53,8 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 		if (local != null) {
 			throw new ResourceFoundException(AppConstant.EMAIL_IN_USE);
 		}
-		local = signupToUser(user);
+//		local = signupToUser(user);
+		local = trimObj(user);
 		
 		Set<UserRole> roles = new HashSet<>();
 		Role role = new Role();
@@ -99,8 +100,20 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 		else
 		{
 			response.put(AppConstant.ERROR, AppConstant.USER_NOT_CREATED);
-			return ResponseEntity.status(HttpStatus.CREATED).body(AppConstant.USER_NOT_CREATED);
+			return ResponseEntity.status(HttpStatus.OK).body(AppConstant.USER_NOT_CREATED);
 		}
+	}
+	
+	public User trimObj(SignupRequest user)
+	{
+		User u = new User();
+		u.setFirstName(user.getFirstName().trim());
+		u.setLastName(user.getLastName().trim());
+		u.setEmail(user.getEmail().trim());
+		u.setMob(user.getMob().trim());
+		u.setPassword(user.getPassword().trim());
+		u.setTempAddress(user.getTempAddress());
+		return u;
 	}
 
 	public User signupToUser(SignupRequest request) {

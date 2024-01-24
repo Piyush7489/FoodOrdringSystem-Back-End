@@ -22,16 +22,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.dollop.fos.entity.Category;
 import com.dollop.fos.entity.Food;
 import com.dollop.fos.entity.Restaurant;
 import com.dollop.fos.helper.AppConstant;
+import com.dollop.fos.paginationdto.PageAllCategoryResponse;
 import com.dollop.fos.paginationdto.PageFoodResponse;
 import com.dollop.fos.paginationdto.PageRestaurantResponsee;
 import com.dollop.fos.reposatory.ICategoryRepo;
 import com.dollop.fos.reposatory.IFoodRepo;
 import com.dollop.fos.reposatory.IRestaurantRepo;
 import com.dollop.fos.requests.AddFoodRequest;
+import com.dollop.fos.requests.CategorySaveRequest;
 import com.dollop.fos.requests.RestaurantRequest;
+import com.dollop.fos.response.AllCategoryResponse;
 import com.dollop.fos.response.FoodResponse;
 import com.dollop.fos.response.ViewRestaurantResponse;
 import com.dollop.fos.service.IAdminService;
@@ -46,6 +50,9 @@ public class AdminServiceImpl implements IAdminService {
 	
 	@Autowired
 	private IFoodRepo frepo;
+	
+	@Autowired
+	private ICategoryRepo crepo;
 
 	
 	@Override
@@ -410,4 +417,69 @@ public class AdminServiceImpl implements IAdminService {
 	{
 		return this.modelMapper.map(food, FoodResponse.class);
 	}
+
+
+	@Override
+	public ResponseEntity<?> viewCategories(int pageNo, int pageSize, String sortBy, CategorySaveRequest csr,
+			String filter) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		Category csrToCategory = this.CSRToCategory(csr);
+		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+				.withIgnoreNullValues()
+				.withStringMatcher(StringMatcher.EXACT.CONTAINING)
+				.withIgnoreCase()
+				.withMatcher("catId", match->match.transform(value->value.map(id->(((Long)id).intValue()==0)?null:((Long)id).intValue())));
+		
+		if(filter.equalsIgnoreCase("ACTIVE"))
+		{
+			csrToCategory.setIsActive(true);
+			Example<Category> example = Example.of(csrToCategory, exampleMatcher);
+			Pageable pagebale = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC,sortBy);
+			Page<Category> findAll = this.crepo.findAll(example, pagebale);
+			Page<AllCategoryResponse> map = findAll.map(cat->CategoryToACR(cat));
+			PageAllCategoryResponse pacr = new PageAllCategoryResponse();
+			pacr.setContents(map.getContent());
+			pacr.setTotalElements(map.getTotalElements());
+			response.put(AppConstant.RESPONSE_MESSAGE, pacr);
+			
+		}else if(filter.equalsIgnoreCase("INACTIVE"))
+		{
+			csrToCategory.setIsActive(false);
+			Example<Category> example = Example.of(csrToCategory, exampleMatcher);
+			Pageable pagebale = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC,sortBy);
+			Page<Category> findAll = this.crepo.findAll(example, pagebale);
+			Page<AllCategoryResponse> map = findAll.map(cat->CategoryToACR(cat));
+			PageAllCategoryResponse pacr = new PageAllCategoryResponse();
+			pacr.setContents(map.getContent());
+			pacr.setTotalElements(map.getTotalElements());
+			response.put(AppConstant.RESPONSE_MESSAGE, pacr);
+			
+		}else {
+			Example<Category> example = Example.of(csrToCategory, exampleMatcher);
+			Pageable pagebale = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC,sortBy);
+			Page<Category> findAll = this.crepo.findAll(example, pagebale);
+			Page<AllCategoryResponse> map = findAll.map(cat->CategoryToACR(cat));
+			PageAllCategoryResponse pacr = new PageAllCategoryResponse();
+			pacr.setContents(map.getContent());
+			pacr.setTotalElements(map.getTotalElements());
+			response.put(AppConstant.RESPONSE_MESSAGE, pacr);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+	
+	public Category CSRToCategory(CategorySaveRequest csr)
+	{
+		return this.modelMapper.map(csr, Category.class);
+	}
+	
+	public AllCategoryResponse CategoryToACR(Category cat)
+	{
+		String email = cat.getRestaurant().getOwner().getEmail();
+		AllCategoryResponse map = this.modelMapper.map(cat, AllCategoryResponse.class);
+		map.setOwnerEmail(email);
+		return map;
+	}
+	
+	
 }

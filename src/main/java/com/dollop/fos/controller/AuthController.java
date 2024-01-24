@@ -18,7 +18,6 @@ import com.dollop.fos.payload.LoginRequest;
 import com.dollop.fos.requests.SignupRequest;
 import com.dollop.fos.service.IUserService;
 import com.dollop.fos.utility.JwtUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -41,13 +40,8 @@ public class AuthController {
 	@PostMapping("/login")
 	 public ResponseEntity<?> login(@RequestBody LoginRequest request)
 	 {
-		 Map<Object,Object> response = new HashMap<>();
 		 authenticationmanger.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail().trim(), request.getPassword().trim()));
-		 String token = jwtutil.generateToken(request.getEmail());
-		 String userRole = this.service.getUserRole(request.getEmail());
-		 response.put(AppConstant.TOKEN, token);
-		 response.put(AppConstant.ROLE, userRole);
-		 return ResponseEntity.status(HttpStatus.OK).body(response);
+		 return jwtutil.generateToken(request.getEmail());
 
 	 }
 }

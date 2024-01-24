@@ -1,22 +1,36 @@
 package com.dollop.fos.utility;
 
 
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import com.dollop.fos.helper.AppConstant;
+import com.dollop.fos.reposatory.IUserRepo;
+import com.dollop.fos.service.IUserService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+
+
 
 @Component
 public class JwtUtils {
+	
+	
+	@Autowired
+	private IUserRepo urepo;
+	
+	@Autowired
+	private IUserService service;	
 
     private String SECRET_KEY = "SheetalPatidarBscComputerScience3yearABCDEFGHIGHIJKLMNOPQRSTUVWXYZSheetalPatidarBscComputerScience3yearABCDEFGHIGHIJKLMNOPQRSTUVWXYZ";
   
@@ -41,9 +55,27 @@ public class JwtUtils {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String userName) {
+    public ResponseEntity<?> generateToken(String userName) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userName);
+        Map<String, Object> response = new HashMap<>();
+        String userRole = this.service.getUserRole(userName);
+        String token;
+        if(userRole.equalsIgnoreCase("BOY"))
+        {
+        	if(this.urepo.findIsActiveByEmail(userName))
+        	{
+        		token = createToken(claims, userName);
+        		response.put(AppConstant.TOKEN, token);
+        	}else {
+        		response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.WAIT_FOR_APPROVAL_BOY);
+        	}
+        }
+        else {
+        	token = createToken(claims, userName);
+        	response.put(AppConstant.TOKEN, token);
+        }
+        response.put(AppConstant.ROLE, userRole);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     private String createToken(Map<String, Object> claims, String subject) {

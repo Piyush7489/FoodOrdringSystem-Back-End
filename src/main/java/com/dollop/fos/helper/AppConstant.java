@@ -97,7 +97,8 @@ public class AppConstant {
 	public static final Object ALREADY_VERIFIED = "Restaurant Already Verified..!!";
 	public static final Object RESTAURANT_VERIFIED_SUCCESSFULLY = "Restaurant Verified SuccessFully..!!";
 	public static final String UNBLOCK = "Unblock";
-	public static final Object WAIT_FOR_APPROVAL = "Restaurant is UnVarified Wait For Admin Approval..!!";
+	public static final Object WAIT_FOR_APPROVAL_RESTAURANT = "Restaurant is UnVarified Wait For Admin Approval..!!";
+	public static final Object WAIT_FOR_APPROVAL_BOY = "Wait For Admin Approval..!!";
 	public static final Object RESTAURANT_ADDRESS_SAVE = "Restaurant Address Save Successfully..!!";
 	public static final Object ADDRESS_ALREADY_SAVE = "Restaurant Address Already Save..!!";
 	public static final String BLOCKED = "block";
