@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dollop.fos.requests.AddFoodRequest;
 import com.dollop.fos.requests.RestaurantRequest;
 import com.dollop.fos.service.IAdminService;
 
@@ -18,6 +19,8 @@ public class AdminController {
 
 	@Autowired
 	private IAdminService service;
+	
+	
 	
 	@PutMapping("/RestaurantApprove/{restId}")
 	public ResponseEntity<?> approveRestaurant(@PathVariable String restId)
@@ -59,7 +62,21 @@ public class AdminController {
 	{
 		return this.service.viewAllBlockRestaurant(pageNo, pageSize, sortBy, request);
 	}
-	
+	@PostMapping("/AllFood/{pn}/{ps}/{sortBy}")
+	public ResponseEntity<?> viewAllFood(@PathVariable("pn") int pageNo,@PathVariable("ps") int pageSize,@PathVariable String sortBy,@RequestBody AddFoodRequest request)
+	{
+		return this.service.viewAllFood(pageNo, pageSize, sortBy, request); 
+	}
+	@PostMapping("/AllActiveFood/{pn}/{ps}/{sortBy}")
+	public ResponseEntity<?> viewAllActiveFood(@PathVariable("pn") int pageNo,@PathVariable("ps") int pageSize,@PathVariable String sortBy,@RequestBody AddFoodRequest request)
+	{
+		return this.service.viewAllActiveFood(pageNo, pageSize, sortBy, request); 
+	}
+	@PostMapping("/AllInActiveFood/{pn}/{ps}/{sortBy}")
+	public ResponseEntity<?> viewAllInActiveFood(@PathVariable("pn") int pageNo,@PathVariable("ps") int pageSize,@PathVariable String sortBy,@RequestBody AddFoodRequest request)
+	{
+		return this.service.viewAllInActiveFood(pageNo, pageSize, sortBy, request); 
+	}
 	
 }
 

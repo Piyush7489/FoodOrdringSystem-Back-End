@@ -22,11 +22,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.dollop.fos.entity.Food;
 import com.dollop.fos.entity.Restaurant;
 import com.dollop.fos.helper.AppConstant;
+import com.dollop.fos.paginationdto.PageFoodResponse;
 import com.dollop.fos.paginationdto.PageRestaurantResponsee;
+import com.dollop.fos.reposatory.ICategoryRepo;
+import com.dollop.fos.reposatory.IFoodRepo;
 import com.dollop.fos.reposatory.IRestaurantRepo;
+import com.dollop.fos.requests.AddFoodRequest;
 import com.dollop.fos.requests.RestaurantRequest;
+import com.dollop.fos.response.FoodResponse;
 import com.dollop.fos.response.ViewRestaurantResponse;
 import com.dollop.fos.service.IAdminService;
 @Service
@@ -37,6 +43,10 @@ public class AdminServiceImpl implements IAdminService {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private IFoodRepo frepo;
+
 	
 	@Override
 	public ResponseEntity<?> verifyRestaurant(String restId) {
@@ -334,4 +344,70 @@ public class AdminServiceImpl implements IAdminService {
 	
 	}
 
+	@Override
+	public ResponseEntity<?> viewAllFood(int pageNo, int pageSize, String sortBy, AddFoodRequest request) {
+		// TODO Auto-generated method stub
+		request.setFoodId(null);
+		Food requestToFood = resquestToFood(request);
+		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+				.withIgnoreNullValues()
+				.withStringMatcher(StringMatcher.EXACT.CONTAINING)
+				.withIgnoreCase()
+				.withMatcher("foodId", match->match.transform(value->value.map(id->(((Long)id).intValue()==0)?null:((Long)id).intValue())));
+		Example<Food> example = Example.of(requestToFood, exampleMatcher);
+		Pageable pagebale = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC, "foodId");
+		Page<Food> findAll = this.frepo.findAll(example, pagebale);
+		Page<FoodResponse> map = findAll.map(food->foodToResponse(food));
+		PageFoodResponse pfr = new PageFoodResponse();
+		pfr.setContents(map.getContent());
+		pfr.setTotalElements(map.getTotalElements());
+		return ResponseEntity.status(HttpStatus.OK).body(pfr);
+	
+	}
+	@Override
+	public ResponseEntity<?> viewAllActiveFood(int pageNo, int pageSize, String sortBy, AddFoodRequest request) {
+		// TODO Auto-generated method stub
+		request.setIsAvailable(true);
+		Food requestToFood = resquestToFood(request);
+		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+				.withIgnoreNullValues()
+				.withStringMatcher(StringMatcher.EXACT.CONTAINING)
+				.withIgnoreCase()
+				.withMatcher("foodId", match->match.transform(value->value.map(id->(((Long)id).intValue()==0)?null:((Long)id).intValue())));
+		Example<Food> example = Example.of(requestToFood, exampleMatcher);
+		Pageable pagebale = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC, "foodId");
+		Page<Food> findAll = this.frepo.findAll(example, pagebale);
+		Page<FoodResponse> map = findAll.map(food->foodToResponse(food));
+		PageFoodResponse pfr = new PageFoodResponse();
+		pfr.setContents(map.getContent());
+		pfr.setTotalElements(map.getTotalElements());
+		return ResponseEntity.status(HttpStatus.OK).body(pfr);
+		
+	}
+	@Override
+	public ResponseEntity<?> viewAllInActiveFood(int pageNo, int pageSize, String sortBy, AddFoodRequest request) {
+		request.setIsAvailable(false);
+		Food requestToFood = resquestToFood(request);
+		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+				.withIgnoreNullValues()
+				.withStringMatcher(StringMatcher.EXACT.CONTAINING)
+				.withIgnoreCase()
+				.withMatcher("foodId", match->match.transform(value->value.map(id->(((Long)id).intValue()==0)?null:((Long)id).intValue())));
+		Example<Food> example = Example.of(requestToFood, exampleMatcher);
+		Pageable pagebale = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC, "foodId");
+		Page<Food> findAll = this.frepo.findAll(example, pagebale);
+		Page<FoodResponse> map = findAll.map(food->foodToResponse(food));
+		PageFoodResponse pfr = new PageFoodResponse();
+		pfr.setContents(map.getContent());
+		pfr.setTotalElements(map.getTotalElements());
+		return ResponseEntity.status(HttpStatus.OK).body(pfr);
+	}
+	public Food resquestToFood(AddFoodRequest foodRequest) 
+	{
+		return this.modelMapper.map(foodRequest, Food.class);
+	}
+	public FoodResponse foodToResponse(Food food) 
+	{
+		return this.modelMapper.map(food, FoodResponse.class);
+	}
 }
