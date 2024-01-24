@@ -58,6 +58,11 @@ public class SecurityConfig {
 			              "/api/v1/food/save",
 	                       };
  
+   private String customer[]= {
+		                        "/api/v1/wish/add",
+		                        "/api/v1/wish/view",
+		                        "/api/v1/wish/remove/{foodId}"
+	                          };
    
    /**For Authentication.....*/
   	@Bean
@@ -83,6 +88,7 @@ public class SecurityConfig {
 		.requestMatchers(permitAll).permitAll()
 		.requestMatchers(admin).hasAuthority("ADMIN")
 		.requestMatchers(owner).hasAuthority("OWNER")
+		.requestMatchers(customer).hasAuthority("CUSTOMER")
 		.anyRequest().authenticated()
 		.and()
 		.exceptionHandling()

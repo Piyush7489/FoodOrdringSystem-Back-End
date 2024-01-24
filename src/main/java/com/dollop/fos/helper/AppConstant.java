@@ -108,6 +108,9 @@ public class AppConstant {
 	public static final Object REST_ALREADY_UNVERIFIED = "Restaurant Already UnVerified..!!";
 	public static final Object RESTAURANT_UNVERIFIED_SUCCESSFULLY = "Restaurant UnVerified Success..!!";
 	public static final String EMAIL_ALREADY_REGISTERED = "1231";
+	public static final Object ADD_WISHLIST = "Added to your Wishlist";
+	public static final Object REMOVE_ITEM_FROM_WISHLIST = "Remove From your Wishlist";
+	
 	
 	
 	
