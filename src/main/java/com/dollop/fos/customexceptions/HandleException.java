@@ -18,5 +18,20 @@ public class HandleException {
 	{
 		return new ResponseEntity<CustomMsgForException>(new CustomMsgForException(new Date().toString(),500,AppConstant.MSG_EXCEPTION,c.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	@ExceptionHandler(IncorrectEmailException.class)
+	public ResponseEntity<CustomMsgForException>inncorrectEmailException(IncorrectEmailException c)
+	{
+		return new ResponseEntity<CustomMsgForException>(new CustomMsgForException(new Date().toString(),500,AppConstant.MSG_EXCEPTION,c.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
+	@ExceptionHandler(OtpTimeExpireException.class)
+	   public ResponseEntity<CustomMsgForException> OtpTimeExpireException(OtpTimeExpireException e)
+	    {
+		return new ResponseEntity<CustomMsgForException>(new CustomMsgForException(new Date().toString(),500,AppConstant.MSG_EXCEPTION,e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<CustomMsgForException>RestaurantNotFound(ResourceNotFoundException c)
+	{
+		return new ResponseEntity<CustomMsgForException>(new CustomMsgForException(new Date().toString(),500,AppConstant.MSG_EXCEPTION,c.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }
