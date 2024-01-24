@@ -29,6 +29,9 @@ public class RestSaveRequest {
 	private String ownerId;
 	private MultipartFile imageName;
 	private String addressrequest;
+	private String fssaiLicense;
+	private String gstRegistration;
+	
 
 	
 }

@@ -56,10 +56,7 @@ public class SecurityConfig {
 			              "/api/v1/rest/save",
 			              "/api/v1/rest/address/{restId}",
 			              "/api/v1/category/save",
-
 			              "/api/v1/category/update",
-			              
-
 			              "/api/v1/food/save",
 
 	                       };
