@@ -60,8 +60,8 @@ public class CategoryServiceImpl implements ICategoryService {
 		Category c = new Category();
 		Restaurant r = this.restRepo.findById(cat.getRestId()).get();
 		c.setCatId(UUID.randomUUID().toString());
-		c.setCatName(cat.getCatName());
-		c.setCatDescription(cat.getCatDescription());
+		c.setCatName(cat.getCatName().trim());
+		c.setCatDescription(cat.getCatDescription().trim());
 		c.setIsActive(true);
 		c.setRestaurant(r);
 		return c;
@@ -93,6 +93,7 @@ public class CategoryServiceImpl implements ICategoryService {
 			System.err.println("NAME NOT BE SAME");
 			if(Objects.nonNull(findBycatNameAndRestId))
 			{
+				System.err.println(findBycatNameAndRestId);
 				response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.CATEGORY__FOUND);
 		        return ResponseEntity.status(HttpStatus.OK).body(response);
 			}else {
@@ -108,9 +109,9 @@ public class CategoryServiceImpl implements ICategoryService {
 	public Category setCatData(CategoryUpdateRequest cat) {
 		Category c = new Category();
 		Restaurant r = this.restRepo.findById(cat.getRestId()).get();
-		c.setCatId(cat.getCatId());
-		c.setCatName(cat.getCatName());
-		c.setCatDescription(cat.getCatDescription());
+		c.setCatId(cat.getCatId().trim());
+		c.setCatName(cat.getCatName().trim());
+		c.setCatDescription(cat.getCatDescription().trim());
 		c.setIsActive(cat.getIsActive());
 		c.setRestaurant(r);
 		return c;
