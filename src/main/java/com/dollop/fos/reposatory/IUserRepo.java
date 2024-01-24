@@ -15,10 +15,13 @@ import com.dollop.fos.entity.User;
 public interface IUserRepo extends JpaRepository<User, String> {
 
 	User findByEmail(String email);
-	
+
+	@Query("SELECT CASE WHEN u.isActive = true THEN true ELSE false END FROM User u WHERE u.email = :email")
+	boolean findIsActiveByEmail(@Param("email") String email);
+
 	@Query("SELECT u FROM User u WHERE u.email=:email")
 	public Optional<User> getUserByName(String email);
-	
+
 	@Query("SELECT u FROM User u JOIN UserRole ur ON u.userId = ur.user.userId "
 			+ "JOIN Role r ON ur.role.roleId = r.roleId " + "WHERE ur.role.roleId = :roleId OR r.roleName = :roleName")
 	Page<User> findAllByRoleIdAndRoleName(String roleName, Long roleId, Pageable p);
