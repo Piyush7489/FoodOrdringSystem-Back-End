@@ -107,7 +107,11 @@ public class AppConstant {
     public static final String RESTAURANT_UNBLOCK_SUCCESSFULLY="Restauant Already Unblock..!!";
 	public static final Object REST_ALREADY_UNVERIFIED = "Restaurant Already UnVerified..!!";
 	public static final Object RESTAURANT_UNVERIFIED_SUCCESSFULLY = "Restaurant UnVerified Success..!!";
+	public static final Object CATEGORY_UPDATE_SUCCESS = "Category update Success....!!";
+	public static final Object RESTAURANT_UNVERIFIED = "This Restaurant is Unverified....!!";
+
 	public static final String EMAIL_ALREADY_REGISTERED = "1231";
+
 	
 	
 	
