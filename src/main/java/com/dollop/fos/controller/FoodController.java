@@ -17,10 +17,10 @@ public class FoodController {
 	@Autowired
 	private IFoodService service;
 	
-    @PostMapping("/save")
-	public ResponseEntity<?> addFood(AddFoodRequest addFoodRequest)
-	{
-		return this.service.addFood(addFoodRequest);
-	}
+//    @PostMapping("/save")
+//	public ResponseEntity<?> addFood(AddFoodRequest addFoodRequest)
+//	{
+//		return this.service.addFood(addFoodRequest);
+//	}
     
 }

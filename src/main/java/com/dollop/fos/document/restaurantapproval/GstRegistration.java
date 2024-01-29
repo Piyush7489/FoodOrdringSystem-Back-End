@@ -19,7 +19,7 @@ public class GstRegistration {
 	@Id
 	private String id;
 	private String licenseNumber;
-	private String licensePhoto;
+	private String gstlicensePhoto;
 	
 
 }

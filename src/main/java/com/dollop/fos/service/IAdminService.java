@@ -10,6 +10,7 @@ import com.dollop.fos.requests.RestaurantRequest;
 
 public interface IAdminService {
 
+	
 	public ResponseEntity<?> verifyRestaurant(String restId);
 	public ResponseEntity<?> unVerifyRestaurant(String restId);
 	public ResponseEntity<?> blockedRestaurant(String restId);
