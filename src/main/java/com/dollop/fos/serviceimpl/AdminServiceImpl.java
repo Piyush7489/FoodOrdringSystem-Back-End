@@ -179,7 +179,7 @@ public class AdminServiceImpl implements IAdminService {
 		Map<String,Object> response = new HashMap<>();
 		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
 				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.EXACT.CONTAINING)
+				.withStringMatcher(StringMatcher.CONTAINING)
 				.withIgnoreCase()
 				.withMatcher("restId", match->match.transform(value->value.map(id->(id=="")?null:id)));
 		Example<Restaurant> example = Example.of(restaurantRequestToRestaurant(request),exampleMatcher);
@@ -228,7 +228,7 @@ public class AdminServiceImpl implements IAdminService {
 		request.setIsApprove(AppConstant.VERIFIED);
 		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
 				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.EXACT.CONTAINING)
+				.withStringMatcher(StringMatcher.CONTAINING)
 				.withIgnoreCase()
 				.withMatcher("restId", match->match.transform(value->value.map(id->(id=="")?null:id)));
 		Example<Restaurant> example = Example.of(restaurantRequestToRestaurant(request),exampleMatcher);
@@ -260,7 +260,7 @@ public class AdminServiceImpl implements IAdminService {
 		request.setIsApprove(AppConstant.UNVERIFIED);
 		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
 				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.EXACT.CONTAINING)
+				.withStringMatcher(StringMatcher.CONTAINING)
 				.withIgnoreCase()
 				.withMatcher("restId", match->match.transform(value->value.map(id->(id=="")?null:id)));
 		Example<Restaurant> example = Example.of(restaurantRequestToRestaurant(request),exampleMatcher);
@@ -292,7 +292,7 @@ public class AdminServiceImpl implements IAdminService {
 		request.setIsApprove(AppConstant.UNBLOCK);
 		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
 				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.EXACT.CONTAINING)
+				.withStringMatcher(StringMatcher.CONTAINING)
 				.withIgnoreCase()
 				.withMatcher("restId", match->match.transform(value->value.map(id->(id=="")?null:id)));
 		Example<Restaurant> example = Example.of(restaurantRequestToRestaurant(request),exampleMatcher);
@@ -324,7 +324,7 @@ public class AdminServiceImpl implements IAdminService {
 		request.setIsApprove(AppConstant.BLOCKED);
 		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
 				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.EXACT.CONTAINING)
+				.withStringMatcher(StringMatcher.CONTAINING)
 				.withIgnoreCase()
 				.withMatcher("restId", match->match.transform(value->value.map(id->(id=="")?null:id)));
 		Example<Restaurant> example = Example.of(restaurantRequestToRestaurant(request),exampleMatcher);
@@ -358,7 +358,7 @@ public class AdminServiceImpl implements IAdminService {
 		Food requestToFood = resquestToFood(request);
 		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
 				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.EXACT.CONTAINING)
+				.withStringMatcher(StringMatcher.CONTAINING)
 				.withIgnoreCase()
 				.withMatcher("foodId", match->match.transform(value->value.map(id->(((Long)id).intValue()==0)?null:((Long)id).intValue())));
 		Example<Food> example = Example.of(requestToFood, exampleMatcher);
@@ -378,7 +378,7 @@ public class AdminServiceImpl implements IAdminService {
 		Food requestToFood = resquestToFood(request);
 		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
 				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.EXACT.CONTAINING)
+				.withStringMatcher(StringMatcher.CONTAINING)
 				.withIgnoreCase()
 				.withMatcher("foodId", match->match.transform(value->value.map(id->(((Long)id).intValue()==0)?null:((Long)id).intValue())));
 		Example<Food> example = Example.of(requestToFood, exampleMatcher);
@@ -397,7 +397,7 @@ public class AdminServiceImpl implements IAdminService {
 		Food requestToFood = resquestToFood(request);
 		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
 				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.EXACT.CONTAINING)
+				.withStringMatcher(StringMatcher.CONTAINING)
 				.withIgnoreCase()
 				.withMatcher("foodId", match->match.transform(value->value.map(id->(((Long)id).intValue()==0)?null:((Long)id).intValue())));
 		Example<Food> example = Example.of(requestToFood, exampleMatcher);
@@ -421,52 +421,37 @@ public class AdminServiceImpl implements IAdminService {
 
 	@Override
 	public ResponseEntity<?> viewCategories(int pageNo, int pageSize, String sortBy, CategorySaveRequest csr,
-			String filter) {
-		// TODO Auto-generated method stub
-		Map<String,Object> response = new HashMap<>();
-		Category csrToCategory = this.CSRToCategory(csr);
-		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
-				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.EXACT.CONTAINING)
-				.withIgnoreCase()
-				.withMatcher("catId", match->match.transform(value->value.map(id->(((Long)id).intValue()==0)?null:((Long)id).intValue())));
-		
-		if(filter.equalsIgnoreCase("ACTIVE"))
-		{
-			csrToCategory.setIsActive(true);
-			Example<Category> example = Example.of(csrToCategory, exampleMatcher);
-			Pageable pagebale = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC,sortBy);
-			Page<Category> findAll = this.crepo.findAll(example, pagebale);
-			Page<AllCategoryResponse> map = findAll.map(cat->CategoryToACR(cat));
-			PageAllCategoryResponse pacr = new PageAllCategoryResponse();
-			pacr.setContents(map.getContent());
-			pacr.setTotalElements(map.getTotalElements());
-			response.put(AppConstant.RESPONSE_MESSAGE, pacr);
-			
-		}else if(filter.equalsIgnoreCase("INACTIVE"))
-		{
-			csrToCategory.setIsActive(false);
-			Example<Category> example = Example.of(csrToCategory, exampleMatcher);
-			Pageable pagebale = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC,sortBy);
-			Page<Category> findAll = this.crepo.findAll(example, pagebale);
-			Page<AllCategoryResponse> map = findAll.map(cat->CategoryToACR(cat));
-			PageAllCategoryResponse pacr = new PageAllCategoryResponse();
-			pacr.setContents(map.getContent());
-			pacr.setTotalElements(map.getTotalElements());
-			response.put(AppConstant.RESPONSE_MESSAGE, pacr);
-			
-		}else {
-			Example<Category> example = Example.of(csrToCategory, exampleMatcher);
-			Pageable pagebale = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC,sortBy);
-			Page<Category> findAll = this.crepo.findAll(example, pagebale);
-			Page<AllCategoryResponse> map = findAll.map(cat->CategoryToACR(cat));
-			PageAllCategoryResponse pacr = new PageAllCategoryResponse();
-			pacr.setContents(map.getContent());
-			pacr.setTotalElements(map.getTotalElements());
-			response.put(AppConstant.RESPONSE_MESSAGE, pacr);
-		}
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+	        String filter) {
+	    Map<String, Object> response = new HashMap<>();
+	    Category csrToCategory = this.CSRToCategory(csr);
+	    csrToCategory = this.trimObject(csrToCategory);
+	    ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+	            .withIgnoreNullValues()
+	            .withStringMatcher(StringMatcher.CONTAINING)
+	            .withIgnoreCase()
+	            .withMatcher("catId", match -> match.transform(value -> value.map(id -> (((Long) id).intValue() == 0) ? null : ((Long) id).intValue())));
+
+	    // Set isActive based on the filter
+	    if (filter.equalsIgnoreCase("ACTIVE")) {
+	        csrToCategory.setIsActive(true);
+	    } else if (filter.equalsIgnoreCase("INACTIVE")) {
+	        csrToCategory.setIsActive(false);
+	    }
+
+	    Example<Category> example = Example.of(csrToCategory, exampleMatcher);
+	    Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC, sortBy);
+	    Page<Category> findAll = this.crepo.findAll(example, pageable);
+	    Page<AllCategoryResponse> map = findAll.map(cat -> CategoryToACR(cat));
+
+	    PageAllCategoryResponse pacr = new PageAllCategoryResponse();
+	    pacr.setContents(map.getContent());
+	    pacr.setTotalElements(map.getTotalElements());
+	    
+	    response.put(AppConstant.RESPONSE_MESSAGE, pacr);
+
+	    return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
+
 	
 	public Category CSRToCategory(CategorySaveRequest csr)
 	{
@@ -479,6 +464,18 @@ public class AdminServiceImpl implements IAdminService {
 		AllCategoryResponse map = this.modelMapper.map(cat, AllCategoryResponse.class);
 		map.setOwnerEmail(email);
 		return map;
+	}
+	
+	public Category trimObject(Category cat)
+	{
+		Category category = new Category();
+		category.setCatDescription(cat.getCatDescription()!=null?cat.getCatDescription().trim():cat.getCatDescription());
+		category.setCatName(cat.getCatName()!=null?cat.getCatName().trim():cat.getCatName());
+		category.setCatId(cat.getCatId()!=null?cat.getCatId().trim():cat.getCatId());
+		category.setIsActive(cat.getIsActive());
+		category.setListOfFood(cat.getListOfFood());
+		category.setRestaurant(cat.getRestaurant());
+		return category;
 	}
 	
 	
