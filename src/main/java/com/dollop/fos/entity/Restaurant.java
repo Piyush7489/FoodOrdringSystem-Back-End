@@ -2,10 +2,13 @@ package com.dollop.fos.entity;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.dollop.fos.document.restaurantapproval.FssaiLiecence;
 import com.dollop.fos.document.restaurantapproval.GstRegistration;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -20,6 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -37,32 +41,30 @@ public class Restaurant {
 	private String currentStatus;
 	private String restDescription;
 	private LocalDateTime createdAt;
-    private LocalDateTime updateAt;
+	private LocalDateTime updateAt;
 	private String isApprove;
 	private String restImageName;
 	private String isBlocked;
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="rest_address_id")
+	@JoinColumn(name = "rest_address_id")
 	private RestAddress restAddress;
-	@OneToOne( cascade = CascadeType.ALL)
-	@JoinColumn(name="rest_fssai_ragistration_id")
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "rest_fssai_ragistration_id")
 	private FssaiLiecence fssaiLicense;
-	@OneToOne( cascade = CascadeType.ALL)
-	@JoinColumn(name="rest_gst_ragistration_id")
-    private GstRegistration gstRegistration;
-    @ManyToOne
-    @JoinColumn(name="owner_id")
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "rest_gst_ragistration_id")
+	private GstRegistration gstRegistration;
+	@ManyToOne
+	@JoinColumn(name = "owner_id")
 	private User owner;
-	@OneToMany(mappedBy = "restaurant",cascade = CascadeType.ALL)
-	@JsonIgnoreProperties(value="restaurant")
+	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties(value = "restaurant")
 	private List<Food> listOfFood;
-	@OneToMany(mappedBy = "restaurant",cascade = CascadeType.ALL)
-	@JsonIgnoreProperties(value="restaurant")
-	private List<Category> listOfCategory;
-	@OneToMany(mappedBy = "rest",cascade = CascadeType.ALL)
-	@JsonIgnoreProperties(value="rest")
+	@OneToMany(mappedBy = "rest", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties(value = "rest")
 	private List<Review> listOfReview = new ArrayList<>();
-	
-	
+	@OneToMany(mappedBy = "restaurant")
+	@JsonIgnore
+	private List<RestaurantCategory> restCategory = new ArrayList<>();
 
 }

@@ -6,6 +6,6 @@ import com.dollop.fos.requests.AddFoodRequest;
 
 public interface IFoodService {
 
-	public ResponseEntity<?> addFood(AddFoodRequest request);
+//	public ResponseEntity<?> addFood(AddFoodRequest request);
 	
 }

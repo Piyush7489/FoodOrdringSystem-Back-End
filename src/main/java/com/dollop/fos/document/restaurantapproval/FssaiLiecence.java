@@ -18,7 +18,7 @@ public class FssaiLiecence {
 	@Id
 	private String id;
 	private String licenseNumber;
-	private String licensePhoto;
+	private String fssaiLicensePhoto;
 	
 
 }

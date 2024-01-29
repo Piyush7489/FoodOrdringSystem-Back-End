@@ -28,9 +28,9 @@ public class Category {
 	private Boolean isActive;
 	@OneToMany(mappedBy = "category")
 	private List<Food> listOfFood;
-	@ManyToOne
-	@JsonIgnoreProperties(value = "listOfCategory")
-	private Restaurant restaurant;
+//	@ManyToOne
+//	@JsonIgnoreProperties(value = "listOfCategory")
+//	private Restaurant restaurant;
 	@Override
 	public String toString() {
 		return "Category [catId=" + catId + ", catName=" + catName + ", catDescription=" + catDescription

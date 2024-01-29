@@ -3,6 +3,7 @@ package com.dollop.fos.requests;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,9 +30,11 @@ public class RestSaveRequest {
 	private String ownerId;
 	private MultipartFile imageName;
 	private String addressrequest;
-	private String fssaiLicense;
-	private String gstRegistration;
-	
+	private String fsseiLicenseRequest;
+	private String gstRegistrationRequest;
+	private MultipartFile gstlicensePhoto;
+	private MultipartFile fssaiLicensePhoto;
+    private List<String> restCategory;
 
 	
 }

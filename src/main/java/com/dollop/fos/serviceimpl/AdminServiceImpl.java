@@ -475,9 +475,9 @@ public class AdminServiceImpl implements IAdminService {
 	
 	public AllCategoryResponse CategoryToACR(Category cat)
 	{
-		String email = cat.getRestaurant().getOwner().getEmail();
+//		String email = cat.getRestaurant().getOwner().getEmail();
 		AllCategoryResponse map = this.modelMapper.map(cat, AllCategoryResponse.class);
-		map.setOwnerEmail(email);
+//		map.setOwnerEmail(email);
 		return map;
 	}
 	
