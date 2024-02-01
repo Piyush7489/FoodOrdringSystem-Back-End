@@ -474,7 +474,7 @@ public class AdminServiceImpl implements IAdminService {
 		category.setCatId(cat.getCatId()!=null?cat.getCatId().trim():cat.getCatId());
 		category.setIsActive(cat.getIsActive());
 		category.setListOfFood(cat.getListOfFood());
-		category.setRestaurant(cat.getRestaurant());
+//		category.setRestaurant(cat.getRestaurant());
 		return category;
 	}
 	
