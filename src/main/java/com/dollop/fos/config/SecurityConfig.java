@@ -50,7 +50,6 @@ public class SecurityConfig {
 		                      "/api/v1/admin/AllFood/{pn}/{ps}/{sortBy}",
 		                      "/api/v1/admin/AllActiveFood/{pn}/{ps}/{sortBy}",
 		                      "/api/v1/admin/AllInActiveFood/{pn}/{ps}/{sortBy}",
-		                      "/api/v1/admin/AllCategories/{pn}/{ps}/{sortBy}/{filter}",
 		                      "/api/v1/globalCategory/save"
                             };
    private String owner[]= {
