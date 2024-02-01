@@ -419,40 +419,6 @@ public class AdminServiceImpl implements IAdminService {
 	}
 
 
-	@Override
-	public ResponseEntity<?> viewCategories(int pageNo, int pageSize, String sortBy, CategorySaveRequest csr,
-	        String filter) {
-	    Map<String, Object> response = new HashMap<>();
-	    Category csrToCategory = this.CSRToCategory(csr);
-	    csrToCategory = this.trimObject(csrToCategory);
-	    ExampleMatcher exampleMatcher = ExampleMatcher.matching()
-	            .withIgnoreNullValues()
-	            .withStringMatcher(StringMatcher.CONTAINING)
-	            .withIgnoreCase()
-	            .withMatcher("catId", match -> match.transform(value -> value.map(id -> (((Long) id).intValue() == 0) ? null : ((Long) id).intValue())));
-
-	    // Set isActive based on the filter
-	    if (filter.equalsIgnoreCase("ACTIVE")) {
-	        csrToCategory.setIsActive(true);
-	    } else if (filter.equalsIgnoreCase("INACTIVE")) {
-	        csrToCategory.setIsActive(false);
-	    }
-
-	    Example<Category> example = Example.of(csrToCategory, exampleMatcher);
-	    Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC, sortBy);
-	    Page<Category> findAll = this.crepo.findAll(example, pageable);
-	    Page<AllCategoryResponse> map = findAll.map(cat -> CategoryToACR(cat));
-
-	    PageAllCategoryResponse pacr = new PageAllCategoryResponse();
-	    pacr.setContents(map.getContent());
-	    pacr.setTotalElements(map.getTotalElements());
-	    
-	    response.put(AppConstant.RESPONSE_MESSAGE, pacr);
-
-	    return ResponseEntity.status(HttpStatus.OK).body(response);
-	}
-
-	
 	public Category CSRToCategory(CategorySaveRequest csr)
 	{
 		return this.modelMapper.map(csr, Category.class);
@@ -466,17 +432,7 @@ public class AdminServiceImpl implements IAdminService {
 		return map;
 	}
 	
-	public Category trimObject(Category cat)
-	{
-		Category category = new Category();
-		category.setCatDescription(cat.getCatDescription()!=null?cat.getCatDescription().trim():cat.getCatDescription());
-		category.setCatName(cat.getCatName()!=null?cat.getCatName().trim():cat.getCatName());
-		category.setCatId(cat.getCatId()!=null?cat.getCatId().trim():cat.getCatId());
-		category.setIsActive(cat.getIsActive());
-		category.setListOfFood(cat.getListOfFood());
-		category.setRestaurant(cat.getRestaurant());
-		return category;
-	}
+	
 	
 	
 }

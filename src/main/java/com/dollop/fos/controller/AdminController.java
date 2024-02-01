@@ -84,10 +84,6 @@ public class AdminController {
 		return this.service.viewAllInActiveFood(pageNo, pageSize, sortBy, request);
 	}
 	
-	@PostMapping("/AllCategories/{pn}/{ps}/{sortBy}/{filter}")
-	public ResponseEntity<?> viewAllCategories(@PathVariable("pn") int pageNo, @PathVariable("ps") int pageSize,
-			@PathVariable String sortBy, @RequestBody CategorySaveRequest request,@PathVariable("filter") String filter) {
-		return this.service.viewCategories(pageNo, pageSize, sortBy, request,filter);
-	}
+	
 
 }

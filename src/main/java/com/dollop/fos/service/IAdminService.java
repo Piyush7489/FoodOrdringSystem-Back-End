@@ -23,5 +23,5 @@ public interface IAdminService {
     public ResponseEntity<?> viewAllFood(int pageNo,int pageSize,String sortBy,AddFoodRequest request);
 	public ResponseEntity<?> viewAllActiveFood(int pageNo,int pageSize,String sortBy,AddFoodRequest request);
 	public ResponseEntity<?> viewAllInActiveFood(int pageNo,int pageSize,String sortBy,AddFoodRequest request);
-	public ResponseEntity<?> viewCategories(int pageNo,int pageSize,String sortBy,CategorySaveRequest csr,String filter);
-} 
+	
+}

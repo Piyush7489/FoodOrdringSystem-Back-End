@@ -1,5 +1,6 @@
 package com.dollop.fos.serviceimpl;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -138,6 +139,15 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 		Map<String, Object> map = findUserRolesByEmail.get(0);
 		Object object = map.get("roleName");
 		return object.toString();
+	}
+
+	@Override
+	public ResponseEntity<?> curentUser(Principal p) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		User u = userRepo.findByEmail(p.getName());
+		response.put(AppConstant.RESPONSE_MESSAGE, u);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
 	
