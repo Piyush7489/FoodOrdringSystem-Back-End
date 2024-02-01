@@ -431,8 +431,7 @@ public class AdminServiceImpl implements IAdminService {
 //		map.setOwnerEmail(email);
 		return map;
 	}
-	
-	
+
 	
 	
 }
