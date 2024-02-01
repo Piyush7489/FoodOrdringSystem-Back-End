@@ -32,6 +32,7 @@ import com.dollop.fos.helper.AppConstant;
 import com.dollop.fos.helper.FolderName;
 import com.dollop.fos.reposatory.IUserRepo;
 import com.dollop.fos.requests.SignupRequest;
+import com.dollop.fos.response.UserResponse;
 import com.dollop.fos.service.IUserService;
 @Service
 public class UserServiceImpl implements IUserService,UserDetailsService {
@@ -146,8 +147,24 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 		// TODO Auto-generated method stub
 		Map<String,Object> response = new HashMap<>();
 		User u = userRepo.findByEmail(p.getName());
-		response.put(AppConstant.RESPONSE_MESSAGE, u);
+		UserResponse userResponse = setData(u);
+		response.put(AppConstant.RESPONSE_MESSAGE, userResponse);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	private UserResponse setData(User u) {
+		// TODO Auto-generated method stub
+		UserResponse userResponse = new UserResponse();
+		userResponse.setUserId(u.getUserId());
+		userResponse.setFirstName(u.getFirstName());
+		userResponse.setLastName(u.getLastName());
+		userResponse.setEmail(u.getEmail());
+		userResponse.setCreateAt(u.getCreateAt());
+		userResponse.setIsActive(u.getIsActive());
+		userResponse.setMob(u.getMob());
+		userResponse.setProfilePhoto(u.getProfilePhoto());
+		userResponse.setTempAddress(u.getTempAddress());
+		return userResponse;
 	}
 	
 	
