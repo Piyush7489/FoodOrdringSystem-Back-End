@@ -19,22 +19,27 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.dollop.fos.entity.Category;
 import com.dollop.fos.entity.Food;
+import com.dollop.fos.entity.GlobalCategory;
 import com.dollop.fos.entity.Restaurant;
 import com.dollop.fos.helper.AppConstant;
 import com.dollop.fos.paginationdto.PageFoodResponse;
+import com.dollop.fos.paginationdto.PageGlobalCategoryResponse;
 import com.dollop.fos.paginationdto.PageRestaurantResponsee;
 import com.dollop.fos.reposatory.IFoodRepo;
+import com.dollop.fos.reposatory.IGlobalCaregoryRepo;
 import com.dollop.fos.reposatory.IRestaurantRepo;
 import com.dollop.fos.requests.AddFoodRequest;
 import com.dollop.fos.requests.CategorySaveRequest;
 import com.dollop.fos.requests.RestaurantRequest;
-import com.dollop.fos.response.AllCategoryResponse;
+
 import com.dollop.fos.response.FoodResponse;
+import com.dollop.fos.response.GlobalCategoryResponse;
 import com.dollop.fos.response.ViewRestaurantResponse;
 import com.dollop.fos.service.IAdminService;
 @Service
@@ -49,8 +54,8 @@ public class AdminServiceImpl implements IAdminService {
 	@Autowired
 	private IFoodRepo frepo;
 	
-//	@Autowired
-//	private ICategoryRepo crepo;
+	@Autowired
+	private IGlobalCaregoryRepo grepo;
 
 	
 	@Override
@@ -408,13 +413,40 @@ public class AdminServiceImpl implements IAdminService {
 		return ResponseEntity.status(HttpStatus.OK).body(pfr);
 	}
 	
-//	@Override 
-//	public ResponseEntity<?> viewAllGlobalCategory(int pageNo, int pageSize, String sortBy,
-//			CategorySaveRequest request) {
-//		// TODO Auto-generated method stub
-//		
-//		return null;
-//	}
+	@Override 
+	public ResponseEntity<?> viewAllGlobalCategory(int pageNo, int pageSize, String sortBy,CategorySaveRequest request) {
+		// TODO Auto-generated method stub
+		GlobalCategory g = requestToGlobalCategory(request);
+		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+				.withIgnoreNullValues()
+				.withStringMatcher(StringMatcher.CONTAINING)
+				.withIgnoreCase()
+				.withMatcher("catId", match->match.transform(value->value.map(id->(((Long)id).intValue()==0)?null:((Long)id).intValue())));
+		         Example<GlobalCategory> example = Example.of(g,exampleMatcher);
+		         Pageable pagebale = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC, sortBy);
+		         Page<GlobalCategory> findAll = this.grepo.findAll(example, pagebale);
+		 		 Page<GlobalCategoryResponse> map = findAll.map(globalCategory->globalCatToResponse(globalCategory));
+		 		 PageGlobalCategoryResponse pgcr = new PageGlobalCategoryResponse();
+		 		 pgcr.setContents(map.getContent());
+		 		 pgcr.setTotalElements(map.getTotalElements());
+		return ResponseEntity.status(HttpStatus.OK).body(pgcr);
+	}
+	
+	private GlobalCategoryResponse globalCatToResponse(GlobalCategory globalcat) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+
+
+	private GlobalCategory requestToGlobalCategory(CategorySaveRequest request) {
+		// TODO Auto-generated method stub
+		return this.modelMapper.map(request,GlobalCategory.class);
+		
+	}
+
+
 	public Food resquestToFood(AddFoodRequest foodRequest) 
 	{
 		return this.modelMapper.map(foodRequest, Food.class);
@@ -430,13 +462,13 @@ public class AdminServiceImpl implements IAdminService {
 		return this.modelMapper.map(csr, Category.class);
 	}
 	
-	public AllCategoryResponse CategoryToACR(Category cat)
-	{
-//		String email = cat.getRestaurant().getOwner().getEmail();
-		AllCategoryResponse map = this.modelMapper.map(cat, AllCategoryResponse.class);
-//		map.setOwnerEmail(email);
-		return map;
-	}
+//	public AllCategoryResponse CategoryToACR(Category cat)
+//	{
+////		String email = cat.getRestaurant().getOwner().getEmail();
+//		AllCategoryResponse map = this.modelMapper.map(cat, AllCategoryResponse.class);
+////		map.setOwnerEmail(email);
+//		return map;
+//	}
 
 
 	

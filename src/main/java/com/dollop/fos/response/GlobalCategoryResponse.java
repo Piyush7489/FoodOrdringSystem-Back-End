@@ -15,13 +15,12 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class AllCategoryResponse {
+public class GlobalCategoryResponse {
 	
 	private String catId;
 	private String catName;
 	private String catDescription;
 	private Boolean isActive;
-	private RestaurantRequest restaurant;
-	private String ownerEmail;
+	
 
 }
