@@ -2,6 +2,7 @@ package com.dollop.fos.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +15,7 @@ import com.dollop.fos.requests.CategorySaveRequest;
 import com.dollop.fos.requests.RestaurantRequest;
 import com.dollop.fos.service.IAdminService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/admin")
 public class AdminController {
