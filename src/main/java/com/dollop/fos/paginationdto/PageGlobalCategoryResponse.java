@@ -2,7 +2,7 @@ package com.dollop.fos.paginationdto;
 
 import java.util.List;
 
-import com.dollop.fos.response.AllCategoryResponse;
+import com.dollop.fos.response.GlobalCategoryResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,8 +13,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class PageAllCategoryResponse {
-	private List<AllCategoryResponse> contents;
+public class PageGlobalCategoryResponse {
+	private List<GlobalCategoryResponse> contents;
 	private Integer pageNo;
 	private Integer pageSize;
 	private Long totalElements;
