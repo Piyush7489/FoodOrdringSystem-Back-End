@@ -34,6 +34,7 @@ import com.dollop.fos.reposatory.IUserRepo;
 import com.dollop.fos.requests.SignupRequest;
 import com.dollop.fos.response.UserResponse;
 import com.dollop.fos.service.IUserService;
+import com.dollop.fos.utility.IImageService;
 @Service
 public class UserServiceImpl implements IUserService,UserDetailsService {
 
@@ -45,6 +46,9 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 	
 	@Autowired
 	private ModelMapper modelmapper;
+	
+//	@Autowired
+//	private IImageService imageService;
 	
 	
 	@Override
