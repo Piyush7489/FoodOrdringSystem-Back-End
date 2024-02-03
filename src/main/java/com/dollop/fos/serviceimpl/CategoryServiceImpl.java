@@ -1,23 +1,7 @@
 package com.dollop.fos.serviceimpl;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.dollop.fos.entity.Category;
-import com.dollop.fos.entity.Restaurant;
-import com.dollop.fos.helper.AppConstant;
-import com.dollop.fos.reposatory.ICategoryRepo;
-import com.dollop.fos.reposatory.IRestaurantRepo;
-import com.dollop.fos.requests.CategorySaveRequest;
-import com.dollop.fos.requests.CategoryUpdateRequest;
 import com.dollop.fos.service.ICategoryService;
 
 @Service

@@ -3,7 +3,6 @@ package com.dollop.fos.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;

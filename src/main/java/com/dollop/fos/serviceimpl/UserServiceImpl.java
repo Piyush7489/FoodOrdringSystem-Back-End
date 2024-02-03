@@ -164,6 +164,7 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 		userResponse.setMob(u.getMob());
 		userResponse.setProfilePhoto(u.getProfilePhoto());
 		userResponse.setTempAddress(u.getTempAddress());
+		userResponse.setUserRole(this.userRepo.findRoleNameByEmail(u.getEmail()));
 		return userResponse;
 	}
 	
