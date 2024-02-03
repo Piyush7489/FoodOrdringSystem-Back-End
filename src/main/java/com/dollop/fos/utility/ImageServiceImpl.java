@@ -8,16 +8,25 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+
 
 @Service
 public class ImageServiceImpl implements IImageService{
+	
+	@Autowired
+	public Cloudinary  cloudinary;
+	
 	
 	  @Value("${project.image}")
 	    private String path;
@@ -29,13 +38,33 @@ public class ImageServiceImpl implements IImageService{
 	    String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
 	    String uuid = UUID.randomUUID().toString();
 		String randomName =  uuid.concat(originalFilename.substring(originalFilename.lastIndexOf(".")));
+		Map uploadResponse;
 		try {
-			Files.copy(file.getInputStream(),Paths.get(currentDir , randomName), StandardCopyOption.REPLACE_EXISTING);
+//			Files.copy(file.getInputStream(),Paths.get(currentDir , randomName), StandardCopyOption.REPLACE_EXISTING);
+			uploadResponse = cloudinary.uploader().upload(Dir.getBytes(),
+					  ObjectUtils.asMap("public_id", Dir +"/"+randomName)); 
+			System.err.println("hghj");
+			return (String)uploadResponse.get("secure_url");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return null;
 		
-		return Dir+File.separator+randomName;
+//		return Dir+File.separator+randomName;
+//		
+//		String randomName= (UUID.randomUUID().toString() + myFile.getOriginalFilename());
+//
+//		String fileName = StringUtils.cleanPath(randomName);
+//		Map uploadResponse;
+//		try {
+//			uploadResponse = cloudinary.uploader().upload(myFile.getBytes(),
+//					  ObjectUtils.asMap("public_id", destinationPath +"/"+fileName)); 
+//			return (String)uploadResponse.get("secure_url");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return null;
 	}
 
 	@Override

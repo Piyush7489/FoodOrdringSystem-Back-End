@@ -28,5 +28,12 @@ public interface IUserRepo extends JpaRepository<User, String> {
 
 	@Query("SELECT NEW map(u.email as email, r.roleName as roleName) FROM User u LEFT JOIN u.userRole ur LEFT JOIN ur.role r WHERE u.email = :email")
 	List<Map<String, Object>> findUserEmailAndRoleNameByEmail(@Param("email") String email);
+	
+	@Query("SELECT r.roleName " +
+	           "FROM User u " +
+	           "JOIN u.userRole ur " +
+	           "JOIN Role r ON ur.role.roleId = r.roleId " +
+	           "WHERE u.email = :email")
+	    String findRoleNameByEmail(@Param("email") String email);
 
 }

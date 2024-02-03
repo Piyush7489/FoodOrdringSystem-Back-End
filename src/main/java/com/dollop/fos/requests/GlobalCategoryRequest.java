@@ -1,6 +1,5 @@
 package com.dollop.fos.requests;
 
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

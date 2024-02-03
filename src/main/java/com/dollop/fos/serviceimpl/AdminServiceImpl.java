@@ -26,10 +26,8 @@ import com.dollop.fos.entity.Category;
 import com.dollop.fos.entity.Food;
 import com.dollop.fos.entity.Restaurant;
 import com.dollop.fos.helper.AppConstant;
-import com.dollop.fos.paginationdto.PageAllCategoryResponse;
 import com.dollop.fos.paginationdto.PageFoodResponse;
 import com.dollop.fos.paginationdto.PageRestaurantResponsee;
-import com.dollop.fos.reposatory.ICategoryRepo;
 import com.dollop.fos.reposatory.IFoodRepo;
 import com.dollop.fos.reposatory.IRestaurantRepo;
 import com.dollop.fos.requests.AddFoodRequest;
@@ -51,8 +49,8 @@ public class AdminServiceImpl implements IAdminService {
 	@Autowired
 	private IFoodRepo frepo;
 	
-	@Autowired
-	private ICategoryRepo crepo;
+//	@Autowired
+//	private ICategoryRepo crepo;
 
 	
 	@Override

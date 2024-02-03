@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dollop.fos.requests.AddFoodRequest;
-import com.dollop.fos.requests.CategorySaveRequest;
 import com.dollop.fos.requests.RestaurantRequest;
 import com.dollop.fos.service.IAdminService;
 
