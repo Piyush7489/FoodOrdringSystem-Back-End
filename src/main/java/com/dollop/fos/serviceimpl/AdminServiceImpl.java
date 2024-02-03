@@ -409,6 +409,14 @@ public class AdminServiceImpl implements IAdminService {
 		pfr.setTotalElements(map.getTotalElements());
 		return ResponseEntity.status(HttpStatus.OK).body(pfr);
 	}
+	
+	@Override
+	public ResponseEntity<?> viewAllGlobalCategory(int pageNo, int pageSize, String sortBy,
+			CategorySaveRequest request) {
+		// TODO Auto-generated method stub
+		
+		return null;
+	}
 	public Food resquestToFood(AddFoodRequest foodRequest) 
 	{
 		return this.modelMapper.map(foodRequest, Food.class);
@@ -431,6 +439,9 @@ public class AdminServiceImpl implements IAdminService {
 //		map.setOwnerEmail(email);
 		return map;
 	}
+
+
+	
 
 	
 }
