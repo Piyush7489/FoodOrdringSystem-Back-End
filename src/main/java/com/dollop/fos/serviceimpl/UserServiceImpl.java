@@ -57,11 +57,10 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 		Map<Object,Object> response = new HashMap<>();
 		User local = this.userRepo.findByEmail(user.getEmail().trim());
 		if (local != null) {
-			throw new ResourceFoundException(AppConstant.EMAIL_IN_USE);
+			response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.EMAIL_IN_USE);
+			return ResponseEntity.status(HttpStatus.OK).body(response);
 		}
-//		local = signupToUser(user);
 		local = trimObj(user);
-		
 		Set<UserRole> roles = new HashSet<>();
 		Role role = new Role();
 		if (user.getTempRole().equalsIgnoreCase("boy")) {
