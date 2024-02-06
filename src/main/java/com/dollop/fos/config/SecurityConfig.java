@@ -37,6 +37,7 @@ public class SecurityConfig {
 			"/api/v1/auth/login",
 			"/api/v1/otp/checkOTP",
 			"/api/v1/emailAPI/sentEmail",
+			 "/api/v1/boy/register"
 	        };
    private String admin[]= {
 		                      "/api/v1/admin/RestaurantApprove/{restId}",
@@ -50,7 +51,9 @@ public class SecurityConfig {
 		                      "/api/v1/admin/AllFood/{pn}/{ps}/{sortBy}",
 		                      "/api/v1/admin/AllActiveFood/{pn}/{ps}/{sortBy}",
 		                      "/api/v1/admin/AllInActiveFood/{pn}/{ps}/{sortBy}",
-		                      "/api/v1/globalCategory/save"
+		                      "/api/v1/globalCategory/save",
+		                      "/api/v1/admin/verify"
+		   
                             };
    private String owner[]= {
 			              "/api/v1/rest/save",
@@ -66,7 +69,9 @@ public class SecurityConfig {
 		                        "/api/v1/wish/view",
 		                        "/api/v1/wish/remove/{foodId}"
 	                          };
-   
+   private String boy[]= { 
+		                    
+                          }; 
    /**For Authentication.....*/
   	@Bean
   	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception 
@@ -92,6 +97,7 @@ public class SecurityConfig {
 		.requestMatchers(admin).hasAuthority("ADMIN")
 		.requestMatchers(owner).hasAuthority("OWNER")
 		.requestMatchers(customer).hasAuthority("CUSTOMER")
+		.requestMatchers(boy).hasAuthority("BOY")
 		.anyRequest().authenticated()
 		.and()
 		.exceptionHandling()

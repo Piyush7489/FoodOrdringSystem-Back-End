@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dollop.fos.requests.AddFoodRequest;
+import com.dollop.fos.requests.DeliveryBoyVerificationRequest;
 import com.dollop.fos.requests.RestaurantRequest;
 import com.dollop.fos.service.IAdminService;
 
@@ -85,6 +86,11 @@ public class AdminController {
 		return this.service.viewAllInActiveFood(pageNo, pageSize, sortBy, request);
 	}
 	
-	
+	@PostMapping("/verify")	
+	public ResponseEntity<?> verificationOfDeliveryBoy(@RequestBody DeliveryBoyVerificationRequest d)
+	{
+	   System.out.println("verification controller....");
+	   return null;
+	}
 
 }
