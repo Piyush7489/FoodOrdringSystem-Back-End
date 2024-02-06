@@ -1,7 +1,10 @@
 package com.dollop.fos.serviceimpl;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -14,11 +17,13 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.dollop.fos.customexceptions.IncorrectEmailException;
 import com.dollop.fos.entity.RegisterOtp;
 import com.dollop.fos.helper.AppConstant;
+import com.dollop.fos.reposatory.IRegisterOTPRepo;
 import com.dollop.fos.service.IEmailService;
 import com.dollop.fos.service.IGenerate_OTPService;
 import com.dollop.fos.service.IRegisterOTPService;
@@ -31,12 +36,27 @@ public class EmailServiceImpl implements IEmailService {
 	@Autowired
 	private IRegisterOTPService roService;
 	
+	@Autowired
+	private IRegisterOTPRepo otpRepo;
+	
+	
 	
 	
 	@Override
-	public Boolean sendEmail(String subject, String message, String sendTo) {
+	public ResponseEntity<?> sendEmail(String subject, String message, String sendTo) {
       Boolean flag = false;
-		
+      Optional<RegisterOtp> optional = otpRepo.findByEmail(sendTo);	
+      Map<String, Object> response = new HashMap<>();
+      if(optional.isPresent() )
+		{
+			if(optional.get().getIsVerify())
+			{
+				response.put(AppConstant.ERROR, AppConstant.EMAIL_ALREADY_REGISTERED);
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+			}
+		} 
+      
+      
 		int otp = otp_service.generate_OTP();
 //		FROM
 		String from = "kushvanshipp@gmail.com";
@@ -130,11 +150,9 @@ public class EmailServiceImpl implements IEmailService {
 				 System.out.println(updateOTP);
 
 				 flag=true;
-				return flag;
 
 			 }else
 			 {
-				 System.out.println("else......");
 				 rOTP.setId(UUID.randomUUID().toString());
 				 rOTP.setEmail(sendTo);
 				 rOTP.setIsVerify(false);
@@ -143,11 +161,13 @@ public class EmailServiceImpl implements IEmailService {
 				 System.out.println(saveOTP);
 				 flag=true;
 			 }
-			 return flag;
+			 response.put(flag?AppConstant.RESPONSE_MESSAGE:AppConstant.ERROR, flag?AppConstant.OTP_SEND_SUCCESSFULLY:AppConstant.SOMETHING_WENT_WRONG);
+			 return ResponseEntity.status(flag?HttpStatus.OK:HttpStatus.BAD_REQUEST).body(response);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			throw new IncorrectEmailException(AppConstant.INCARRECT_EMAIL_EXCEPTION);
+			response.put(AppConstant.ERROR, AppConstant.INCARRECT_EMAIL_EXCEPTION);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}
 		 
 	}

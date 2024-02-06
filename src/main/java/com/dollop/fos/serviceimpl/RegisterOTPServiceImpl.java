@@ -2,14 +2,16 @@ package com.dollop.fos.serviceimpl;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.dollop.fos.customexceptions.OtpTimeExpireException;
 import com.dollop.fos.customexceptions.ResourceFoundException;
-import com.dollop.fos.customexceptions.ResourceNotFoundException;
 import com.dollop.fos.entity.RegisterOtp;
 import com.dollop.fos.helper.AppConstant;
 import com.dollop.fos.reposatory.IRegisterOTPRepo;
@@ -70,16 +72,18 @@ public class RegisterOTPServiceImpl implements IRegisterOTPService {
 
 
 	@Override
-	public Boolean checkOTP(CheckOTPRequest cor) {
+	public ResponseEntity<?> checkOTP(CheckOTPRequest cor) {
 		// TODO Auto-generated method stub
 		Optional<RegisterOtp> optional = this.repo.findByEmail(cor.getEmail());
+		Map<Object,Object> response = new HashMap<>();
 		RegisterOtp registerOTP = optional.get();
 		System.out.println(cor.getOtp()+"F OTP"+"  ===  DOTP "+registerOTP.getOtp()+"X");
 		if(optional.isPresent())
 		{
 			if(optional.get().getIsVerify())
 			{
-				throw new ResourceFoundException(AppConstant.DUPLICATE_EMAIL);
+				response.put(AppConstant.ERROR, AppConstant.DUPLICATE_EMAIL);
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 			}
 			else
 			{
@@ -92,21 +96,25 @@ public class RegisterOTPServiceImpl implements IRegisterOTPService {
 						RegisterOtp ro = new RegisterOtp(registerOTP.getId(), cor.getEmail(), cor.getOtp(), true,LocalDateTime.now());
 							this.updateOTP(ro, registerOTP.getId());
 							System.out.println("CHECK OTP TRUE");
-							return true;
+							response.put(AppConstant.RESPONSE_MESSAGE,true);
+							return ResponseEntity.status(HttpStatus.OK).body(response);
 						}
 					else
 					{
 						System.out.println("CHECK OTP FALSE");
-						return false;
+						response.put(AppConstant.RESPONSE_MESSAGE,false);
+						return ResponseEntity.status(HttpStatus.OK).body(response);
 					}
 				}
 				else
 				{
-					throw new OtpTimeExpireException(AppConstant.OTP_TIME_EXPIRE);
+					response.put(AppConstant.ERROR, AppConstant.OTP_TIME_EXPIRE);
+					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 				}	
 			}
 		}
-		throw new ResourceNotFoundException(AppConstant.NO_VALUE_PRESENT);
+		response.put(AppConstant.ERROR, AppConstant.NO_VALUE_PRESENT);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		
 	}
 

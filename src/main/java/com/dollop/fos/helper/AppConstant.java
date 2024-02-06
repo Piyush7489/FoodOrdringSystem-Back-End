@@ -72,6 +72,8 @@ public class AppConstant {
 //	// COMMAN
 //
 	public static final Long OTP_TIME_DIFERENCE = (long) 5;
+	public static final Object OTP_SEND_SUCCESSFULLY = "OTP Send Sucessfully....";
+	public static final String SOMETHING_WENT_WRONG = "Something went wrong....";
 //	public static final Object REST_UNDO_SUCCESS = "UNDO RESTAURANT...!!";
 //	public static final Object SERVER_ERROR = "Something Went Wrong..!!";
 //
@@ -79,6 +81,13 @@ public class AppConstant {
 	public static final String DATA = "data";
 	public static final String ERROR = "error";
 	public static final String TOKEN = "token";
+	public static final String USER_ROLE_BOY = "BOY";
+	public static final String USER_ROLE_OWNER = "OWNER";
+	public static final String USER_ROLE_CUSTOMER = "CUSTOMER";
+	public static final Long ROLE_ID_BOY = (long)10;
+	public static final Long ROLE_ID_OWNER = (long)20;
+	public static final Long ROLE_ID_CUSTOMER = (long)30;
+	public static final String DEFAULT_USER_IMAGE = "/user.png";
 //	public static final String ADMIN = "admin";
 //	public static final String BOY = "boy";
 //	public static final String CUSTOMER = "customer";
@@ -111,7 +120,7 @@ public class AppConstant {
 	public static final Object CATEGORY_UPDATE_SUCCESS = "Category update Success....!!";
 	public static final Object RESTAURANT_UNVERIFIED = "This Restaurant is Unverified....!!";
 
-	public static final String EMAIL_ALREADY_REGISTERED = "1231";
+	public static final String EMAIL_ALREADY_REGISTERED = "Email is already registered....";
 
 	public static final Object ADD_WISHLIST = "Added to your Wishlist";
 	public static final Object REMOVE_ITEM_FROM_WISHLIST = "Remove From your Wishlist";

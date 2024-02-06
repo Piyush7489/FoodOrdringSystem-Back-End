@@ -1,7 +1,6 @@
 package com.dollop.fos.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,10 +21,10 @@ public class RegisterOTPController {
 	private IRegisterOTPService otpService;
 	
 	@PostMapping("/checkOTP")
-	private ResponseEntity<Boolean> checkOTP(@RequestBody CheckOTPRequest cor)
+	private ResponseEntity<?> checkOTP(@RequestBody CheckOTPRequest cor)
 	{
-		Boolean checkOTP = this.otpService.checkOTP(cor);
-		return new ResponseEntity<Boolean>(checkOTP,HttpStatus.OK);
+		System.err.println(cor);
+		return this.otpService.checkOTP(cor);
 		
 	}
 }

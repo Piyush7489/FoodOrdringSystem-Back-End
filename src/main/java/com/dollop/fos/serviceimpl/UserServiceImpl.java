@@ -58,54 +58,46 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 		User local = this.userRepo.findByEmail(user.getEmail().trim());
 		if (local != null) {
 			response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.EMAIL_IN_USE);
-			return ResponseEntity.status(HttpStatus.OK).body(response);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}
+		UserRole userRole = new UserRole();
 		local = trimObj(user);
 		Set<UserRole> roles = new HashSet<>();
 		Role role = new Role();
-		if (user.getTempRole().equalsIgnoreCase("boy")) {
-			role.setRoleId(10L);
-			role.setRoleName("BOY");
-			UserRole userRole = new UserRole();
-			userRole.setUser(local);
-			userRole.setRole(role);
-			roles.add(userRole);
+		if (user.getTempRole().equalsIgnoreCase(AppConstant.USER_ROLE_BOY)) {
+			role.setRoleId(AppConstant.ROLE_ID_BOY);
+			role.setRoleName(AppConstant.USER_ROLE_BOY);
 			local.setIsActive(false);
 			
 		}
-     else if (user.getTempRole().equalsIgnoreCase("owner")) {
-			role.setRoleId(20L);
-			role.setRoleName("OWNER");
-			UserRole userRole = new UserRole();
-			userRole.setUser(local);
-			userRole.setRole(role);
-			roles.add(userRole);
+     else if (user.getTempRole().equalsIgnoreCase(AppConstant.USER_ROLE_OWNER)) {
+			role.setRoleId(AppConstant.ROLE_ID_OWNER);
+			role.setRoleName(AppConstant.USER_ROLE_OWNER);
 			local.setIsActive(true);
 		}
      else {	
-			role.setRoleId(30L);
-			role.setRoleName("CUSTOMER");
-			UserRole userRole = new UserRole();
-			userRole.setUser(local);
-			userRole.setRole(role);
-			roles.add(userRole);
+			role.setRoleId(AppConstant.ROLE_ID_CUSTOMER);
+			role.setRoleName(AppConstant.USER_ROLE_CUSTOMER);
 			local.setIsActive(true);
 		}
+		userRole.setUser(local);
+		userRole.setRole(role);
+		roles.add(userRole);
 		local.setUserId(UUID.randomUUID().toString());
-		local.setProfilePhoto(FolderName.PROFILE_PHOTO+"/user.png");
+		local.setProfilePhoto(FolderName.PROFILE_PHOTO+AppConstant.DEFAULT_USER_IMAGE);
 		local.setCreateAt(LocalDate.now());
 		local.setUserRole(roles);
 		local.setPassword(pass.encode(local.getPassword()));
 		local = this.userRepo.save(local);
 		if(Objects.nonNull(local))
 		{
-			response.put(AppConstant.DATA, user.getTempRole()+AppConstant.USER_CREATED);
+			response.put(AppConstant.RESPONSE_MESSAGE, user.getTempRole()+AppConstant.USER_CREATED);
 			return ResponseEntity.status(HttpStatus.CREATED).body(response);
 		}
 		else
 		{
 			response.put(AppConstant.ERROR, AppConstant.USER_NOT_CREATED);
-			return ResponseEntity.status(HttpStatus.OK).body(AppConstant.USER_NOT_CREATED);
+			return ResponseEntity.status(HttpStatus.OK).body(response);
 		}
 	}
 	
