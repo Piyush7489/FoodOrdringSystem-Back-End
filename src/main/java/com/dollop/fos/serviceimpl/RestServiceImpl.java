@@ -29,6 +29,7 @@ import com.dollop.fos.reposatory.IGlobalCaregoryRepo;
 import com.dollop.fos.reposatory.IRestaurantCategoryRepo;
 import com.dollop.fos.reposatory.IRestaurantRepo;
 import com.dollop.fos.reposatory.IUserRepo;
+import com.dollop.fos.reposatory.IVehicleRepo;
 import com.dollop.fos.requests.FsseiLicenseRequest;
 import com.dollop.fos.requests.GstRegistrationRequest;
 import com.dollop.fos.requests.RestAddressRequest;
@@ -46,6 +47,7 @@ public class RestServiceImpl implements IRestaurantService {
 	
 	@Autowired
 	private IRestaurantRepo repo;
+	
 	
 	@Autowired
 	private IImageService iService;
@@ -78,7 +80,6 @@ public class RestServiceImpl implements IRestaurantService {
 		
 		try {
 			imageName = this.iService.uploadImage(rest.getImageName(), FolderName.RESTAURANT);
-			
 			r.setRestImageName(imageName);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -103,8 +104,6 @@ public class RestServiceImpl implements IRestaurantService {
 	}
 
 	private Restaurant setRestData(RestSaveRequest rest,Principal p) {
-		// TODO Auto-generated method stub
-//		System.err.println(rest.getRestCategory());
 		Restaurant r = new Restaurant();
 		String id=UUID.randomUUID().toString();
 	    r.setRestId(id);
@@ -117,33 +116,18 @@ public class RestServiceImpl implements IRestaurantService {
 	    r.setIsBlocked(AppConstant.UNBLOCK);
 	    r.setIsApprove(AppConstant.UNVERIFIED);
 	    r.setCurrentStatus(AppConstant.REST_CURR_CLOSE);
-	    
 	    User owner = this.urepo.getUserByName(p.getName()).get();
 		r.setOwner(owner);
 		RestAddressRequest addressRequest;
 		FsseiLicenseRequest fsseiLicenseRequest;
 		GstRegistrationRequest gstRegistrationRequest;
-		RestCategoryRequest restCategoryRequest;
-//		String restCategory = rest.getRestCategory();
-		
 		try {
 			addressRequest = this.objectMapper.readValue(rest.getAddressrequest(), RestAddressRequest.class);
 			fsseiLicenseRequest=this.objectMapper.readValue(rest.getFsseiLicenseRequest(), FsseiLicenseRequest.class);
 			gstRegistrationRequest=this.objectMapper.readValue(rest.getGstRegistrationRequest(), GstRegistrationRequest.class);
-//			restCategoryRequest=this.objectMapper.readValue(rest.getRestCategory(),RestCategoryRequest.class);
-//			List<Object> abc = new ArrayList<>();
-//			List<String> restCategory = rest.getRestCategory();
-//			for(String rcr :restCategory )
-//			{
-//				System.err.println(rcr);
-//				GlobalCategory globalCategory = this.gRepo.findWithId(rcr);
-//				abc.add(globalCategory);
-//				System.err.println(globalCategory);
-//			}
 			r.setFssaiLicense(this.setDataInFssei(fsseiLicenseRequest,rest.getFssaiLicensePhoto()));
 			r.setGstRegistration(this.setDataInGst(gstRegistrationRequest,rest.getGstlicensePhoto()));
 			r.setRestAddress(this.setDataInRestAddress(addressRequest,id));
-//			r.setRestCategory(this.setDataInRestCategory(abc,id));
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
