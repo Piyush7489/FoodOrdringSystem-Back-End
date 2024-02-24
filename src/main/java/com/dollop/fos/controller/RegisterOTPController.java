@@ -24,6 +24,7 @@ public class RegisterOTPController {
 	private ResponseEntity<?> checkOTP(@RequestBody CheckOTPRequest cor)
 	{
 		System.err.println(cor);
+		
 		return this.otpService.checkOTP(cor);
 		
 	}

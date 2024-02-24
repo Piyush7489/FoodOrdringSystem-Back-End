@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -88,6 +89,7 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 		local.setCreateAt(LocalDate.now());
 		local.setUserRole(roles);
 		local.setPassword(pass.encode(local.getPassword()));
+		
 		local = this.userRepo.save(local);
 		if(Objects.nonNull(local))
 		{
@@ -124,7 +126,11 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 		if(user.isEmpty()) 
 		{
 			throw new ResourceFoundException(AppConstant.USER_NOT_FOUND);
-		}	List<GrantedAuthority> authorities = user.get().getUserRole().stream().map(role->new SimpleGrantedAuthority(role.getRole().getRoleName())).collect(Collectors.toList());
+		}	
+		user.get().getUserRole().stream().forEach(ur->{
+			System.err.println(ur.getRole().getRoleName());
+		});
+		List<GrantedAuthority> authorities = user.get().getUserRole().stream().map(role->new SimpleGrantedAuthority(role.getRole().getRoleName())).collect(Collectors.toList());
             return new org.springframework.security.core.userdetails.User(useremail, user.get().getPassword(), authorities);
      }
 
@@ -161,6 +167,37 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 		userResponse.setTempAddress(u.getTempAddress());
 		userResponse.setUserRole(this.userRepo.findRoleNameByEmail(u.getEmail()));
 		return userResponse;
+	}
+
+	@Override
+	public ResponseEntity<?> checkEmail(String email) {
+		// TODO Auto-generated method stub
+		Map<String, Object>response = new HashMap<>();
+	    User u = this.userRepo.findByEmail(email);
+	    System.err.println(u);
+	    if(u.equals("null")) 
+	    {
+	    	response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.USER_NOT_FOUND);
+	    	return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	    }
+	    response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.USER_IS_VALID);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	@Override
+	public ResponseEntity<?> newPassForForgetPass(String email, String password) {
+		// TODO Auto-generated method stub
+		Map<String, Object>response = new HashMap<>();
+		User user = this.userRepo.findByEmail(email);
+		if(user==null) 
+		{
+			response.put(AppConstant.ERROR, AppConstant.INVALID_USER);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+		}
+		user.setPassword(pass.encode(password));
+		this.userRepo.save(user);
+		response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.PASSWORD_CHANGE);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
 	

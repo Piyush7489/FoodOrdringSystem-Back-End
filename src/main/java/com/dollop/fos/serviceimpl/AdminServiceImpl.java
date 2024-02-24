@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,7 @@ import com.dollop.fos.reposatory.IRestaurantRepo;
 import com.dollop.fos.requests.AddFoodRequest;
 import com.dollop.fos.requests.CategorySaveRequest;
 import com.dollop.fos.requests.RestaurantRequest;
-
+import com.dollop.fos.requests.RestaurantVerificationRequest;
 import com.dollop.fos.response.FoodResponse;
 import com.dollop.fos.response.GlobalCategoryResponse;
 import com.dollop.fos.response.ViewRestaurantResponse;
@@ -429,12 +431,18 @@ public class AdminServiceImpl implements IAdminService {
 		 		 PageGlobalCategoryResponse pgcr = new PageGlobalCategoryResponse();
 		 		 pgcr.setContents(map.getContent());
 		 		 pgcr.setTotalElements(map.getTotalElements());
+		 		 pgcr.setTotalPages(map.getTotalPages());
 		return ResponseEntity.status(HttpStatus.OK).body(pgcr);
 	}
 	
 	private GlobalCategoryResponse globalCatToResponse(GlobalCategory globalcat) {
 		// TODO Auto-generated method stub
-		return null;
+		GlobalCategoryResponse g = new GlobalCategoryResponse();
+		g.setCatDescription(globalcat.getCatDescription());
+		g.setCatId(globalcat.getCatId());
+		g.setCatName(globalcat.getCatName());
+		g.setIsActive(globalcat.getIsActive());
+		return g;
 	}
 
 	
@@ -460,6 +468,70 @@ public class AdminServiceImpl implements IAdminService {
 	public Category CSRToCategory(CategorySaveRequest csr)
 	{
 		return this.modelMapper.map(csr, Category.class);
+	}
+
+
+	@Override
+	public ResponseEntity<?> viewAllCategory() {
+		// TODO Auto-generated method stub
+		
+		List<GlobalCategory> g=this.grepo.findAll();
+		Map<String,Object> response = new HashMap<>();
+		response.put(AppConstant.RESPONSE_MESSAGE, g);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+
+	@Override
+	public ResponseEntity<?> viewAllRestaurant() {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		List<Restaurant> restaurant = this.restRepo.findAll();
+		List<ViewRestaurantResponse> view = this.RestaurantToRestaurantResponse(restaurant);
+		response.put(AppConstant.RESPONSE_MESSAGE, view);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+
+	private List<ViewRestaurantResponse> RestaurantToRestaurantResponse(List<Restaurant> restaurant) {
+		// TODO Auto-generated method stub
+		return restaurant.stream().map(this::restToViewRestResponse).collect(Collectors.toList());
+	}
+
+
+	@Override
+	public ResponseEntity<?> viewVerifiedRestaurant() {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		List<Restaurant> restaurant = this.restRepo.findAllVerifiedRestaurant(AppConstant.VERIFIED);
+		List<ViewRestaurantResponse> view = this.RestaurantToRestaurantResponse(restaurant);
+		response.put(AppConstant.RESPONSE_MESSAGE, view);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+
+	@Override
+	public ResponseEntity<?> verificationOfRestaurant(String id) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		Restaurant r = this.restRepo.findByRestId(id);
+	    RestaurantVerificationRequest re = setDataInVerification(r);
+	    response.put(AppConstant.RESPONSE_MESSAGE,re);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+
+	private RestaurantVerificationRequest setDataInVerification(Restaurant r) {
+		// TODO Auto-generated method stub
+		RestaurantVerificationRequest r1 = new RestaurantVerificationRequest();
+		r1.setFssaiLicenceNo(r.getFssaiLicense().getLicenseNumber());
+		r1.setFssaiLicencePhoto(r.getFssaiLicense().getFssaiLicensePhoto());
+		r1.setGstLicencePhoto(r.getGstRegistration().getGstlicensePhoto());
+		r1.setGstlicenseNo(r.getGstRegistration().getLicenseNumber());
+		r1.setRestid(r.getRestId());
+		r1.setRestname(r.getRestName());
+		r1.setRestImage(r.getRestImageName());
+		return r1;
 	}
 	
 //	public AllCategoryResponse CategoryToACR(Category cat)

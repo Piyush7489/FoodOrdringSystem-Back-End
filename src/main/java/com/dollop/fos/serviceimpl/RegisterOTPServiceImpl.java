@@ -69,14 +69,27 @@ public class RegisterOTPServiceImpl implements IRegisterOTPService {
 		return otp;
 		
 	}
+	
+	public RegisterOtp updateOTPForForget(RegisterOtp ro, String Id) {
+		// TODO Auto-generated method stub
+		ro.setId(Id);
+		Optional<RegisterOtp> optional = this.repo.findByEmail(ro.getEmail());
+		RegisterOtp otp = this.repo.save(ro);
+		return otp;
+		
+	}
+
 
 
 	@Override
 	public ResponseEntity<?> checkOTP(CheckOTPRequest cor) {
 		// TODO Auto-generated method stub
+		System.err.println("1"+" "+cor.getEmail());
 		Optional<RegisterOtp> optional = this.repo.findByEmail(cor.getEmail());
+		System.err.println("2" +optional);
 		Map<Object,Object> response = new HashMap<>();
 		RegisterOtp registerOTP = optional.get();
+		System.err.println("3");
 		System.out.println(cor.getOtp()+"F OTP"+"  ===  DOTP "+registerOTP.getOtp()+"X");
 		if(optional.isPresent())
 		{

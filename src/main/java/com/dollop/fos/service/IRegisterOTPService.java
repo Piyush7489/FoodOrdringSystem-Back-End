@@ -16,4 +16,5 @@ public interface IRegisterOTPService {
 	RegisterOtp ifEmailExist(String email);
 	RegisterOtp updateOTP(RegisterOtp ro, String Id);
 	ResponseEntity<?> checkOTP(CheckOTPRequest cor);
+	RegisterOtp updateOTPForForget(RegisterOtp ro, String Id);
 }

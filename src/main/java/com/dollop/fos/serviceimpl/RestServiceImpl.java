@@ -8,9 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,12 +34,11 @@ import com.dollop.fos.reposatory.IGlobalCaregoryRepo;
 import com.dollop.fos.reposatory.IRestaurantCategoryRepo;
 import com.dollop.fos.reposatory.IRestaurantRepo;
 import com.dollop.fos.reposatory.IUserRepo;
-import com.dollop.fos.reposatory.IVehicleRepo;
 import com.dollop.fos.requests.FsseiLicenseRequest;
 import com.dollop.fos.requests.GstRegistrationRequest;
 import com.dollop.fos.requests.RestAddressRequest;
-import com.dollop.fos.requests.RestCategoryRequest;
 import com.dollop.fos.requests.RestSaveRequest;
+import com.dollop.fos.response.ViewRestaurantResponse;
 import com.dollop.fos.service.IRestaurantService;
 import com.dollop.fos.utility.IImageService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -67,8 +71,11 @@ public class RestServiceImpl implements IRestaurantService {
 	@Override
 	public ResponseEntity<?> addRestaurant(RestSaveRequest rest,Principal p) {
 		// TODO Auto-generated method stub
+		
 		Map<String,Object> response = new HashMap<>();
+		System.err.println("1");
 		Restaurant r = this.setRestData(rest,p);
+		
 		Restaurant r1 = this.repo.findByRestName(r.getRestName());
 		if(r1!=null) 
 		{
@@ -104,6 +111,7 @@ public class RestServiceImpl implements IRestaurantService {
 	}
 
 	private Restaurant setRestData(RestSaveRequest rest,Principal p) {
+		System.err.println("2");
 		Restaurant r = new Restaurant();
 		String id=UUID.randomUUID().toString();
 	    r.setRestId(id);
@@ -118,6 +126,7 @@ public class RestServiceImpl implements IRestaurantService {
 	    r.setCurrentStatus(AppConstant.REST_CURR_CLOSE);
 	    User owner = this.urepo.getUserByName(p.getName()).get();
 		r.setOwner(owner);
+		
 		RestAddressRequest addressRequest;
 		FsseiLicenseRequest fsseiLicenseRequest;
 		GstRegistrationRequest gstRegistrationRequest;
@@ -125,9 +134,10 @@ public class RestServiceImpl implements IRestaurantService {
 			addressRequest = this.objectMapper.readValue(rest.getAddressrequest(), RestAddressRequest.class);
 			fsseiLicenseRequest=this.objectMapper.readValue(rest.getFsseiLicenseRequest(), FsseiLicenseRequest.class);
 			gstRegistrationRequest=this.objectMapper.readValue(rest.getGstRegistrationRequest(), GstRegistrationRequest.class);
+			r.setRestAddress(this.setDataInRestAddress(addressRequest,id));
 			r.setFssaiLicense(this.setDataInFssei(fsseiLicenseRequest,rest.getFssaiLicensePhoto()));
 			r.setGstRegistration(this.setDataInGst(gstRegistrationRequest,rest.getGstlicensePhoto()));
-			r.setRestAddress(this.setDataInRestAddress(addressRequest,id));
+			
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
@@ -165,6 +175,7 @@ public class RestServiceImpl implements IRestaurantService {
 	private GstRegistration setDataInGst(GstRegistrationRequest gstRegistrationRequest, MultipartFile gstlicensePhoto) {
 		// TODO Auto-generated method stub
 		GstRegistration g = new GstRegistration();
+		System.err.println("5");
 		g.setId(UUID.randomUUID().toString());
 		g.setLicenseNumber(gstRegistrationRequest.getLicenseNumber());
 		String imageName;
@@ -181,10 +192,12 @@ public class RestServiceImpl implements IRestaurantService {
 	private FssaiLiecence setDataInFssei(FsseiLicenseRequest fsseiLicenseRequest,MultipartFile license) {
 		// TODO Auto-generated method stub
 		FssaiLiecence f = new FssaiLiecence();
+		System.err.println("4");
 		f.setId(UUID.randomUUID().toString());
 		f.setLicenseNumber(fsseiLicenseRequest.getLicenseNumber());
 		String imagename;
 		try {
+			System.err.println("image"+license);
 			imagename = iService.uploadImage(license, FolderName.LICENSE);
 			f.setFssaiLicensePhoto(imagename);
 		} catch (IOException e) {
@@ -199,6 +212,7 @@ public class RestServiceImpl implements IRestaurantService {
 	private RestAddress setDataInRestAddress(RestAddressRequest request,String id) {
 		// TODO Auto-generated method stub
 		RestAddress address = new RestAddress();
+		System.err.println("3");
 		address.setRestAddressId(UUID.randomUUID().toString());
 		address.setCity(request.getCity());
 		address.setRestContect(request.getRestContect());
@@ -208,6 +222,43 @@ public class RestServiceImpl implements IRestaurantService {
 		address.setLatitude(request.getLatitude());
 		address.setLongitude(request.getLongitude());
 		return address;
+	}
+
+	@Override
+	public ResponseEntity<?> changeStatus(String id, boolean status) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		Restaurant r = this.repo.findByRestId(id);
+		r.setRestId(id);
+		r.setIsActive(status);
+		this.repo.save(r);
+		response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.RESTAURANT_UPDATE_SUCCESS);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	@Override
+	public ResponseEntity<?> getDataofRestaurant(int page, int size) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		 Pageable pageable = PageRequest.of(page, size);
+		 Page <Restaurant>restaurant= repo.findAll(pageable);
+		 List<ViewRestaurantResponse> viewRestaurant = restaurant.getContent().stream().map(this::restToViewRestResponse) .collect(Collectors.toList());
+		 Page page1 = new PageImpl<>(viewRestaurant,pageable,restaurant.getTotalElements());
+		 response.put(AppConstant.RESPONSE_MESSAGE, page1);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+	private ViewRestaurantResponse restToViewRestResponse(Restaurant r) {
+		ViewRestaurantResponse v = new ViewRestaurantResponse();
+		v.setRestId(r.getRestId());
+		v.setRestName(r.getRestName());
+		v.setCurrentStatus(r.getCurrentStatus());
+		v.setIsActive(r.getIsActive());
+		v.setIsBlocked(r.getIsBlocked());
+		v.setIsApprove(r.getIsApprove());
+		v.setRestCloseTime(r.getRestCloseTime());
+		v.setRestOpenTime(r.getRestOpenTime());
+		v.setRestDescription(r.getRestDescription());
+		return v;
 	}
 
 }

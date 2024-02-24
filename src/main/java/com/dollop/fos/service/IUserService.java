@@ -12,4 +12,6 @@ public interface IUserService {
 	public ResponseEntity<?> createUser(SignupRequest user);
 	public String getUserRole(String email); 
 	public ResponseEntity<?> curentUser(Principal p);
+	public ResponseEntity<?> checkEmail(String email);
+	public ResponseEntity<?> newPassForForgetPass(String email,String pass);
 }

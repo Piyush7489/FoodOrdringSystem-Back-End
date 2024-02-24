@@ -37,7 +37,11 @@ public class SecurityConfig {
 			"/api/v1/auth/login",
 			"/api/v1/otp/checkOTP",
 			"/api/v1/emailAPI/sentEmail",
-			 "/api/v1/boy/register"
+			"/api/v1/emailAPI/forget-pass",
+			 "/api/v1/boy/register",
+			 "/api/v1/auth/check/{email}",
+			 "/api/v1/auth/new-pass/{email}/{pass}"
+			 
 	        };
    private String admin[]= {
 		                      "/api/v1/admin/RestaurantApprove/{restId}",
@@ -51,9 +55,20 @@ public class SecurityConfig {
 		                      "/api/v1/admin/AllFood/{pn}/{ps}/{sortBy}",
 		                      "/api/v1/admin/AllActiveFood/{pn}/{ps}/{sortBy}",
 		                      "/api/v1/admin/AllInActiveFood/{pn}/{ps}/{sortBy}",
+		                      "/api/v1/admin/viewCategory/{pn}/{ps}/{sortBy}",
+		                      "/api/v1/globalCategory/data",
 		                      "/api/v1/globalCategory/save",
-		                      "/api/v1/admin/verify"
-		   
+		                      "/api/v1/globalCategory/{id}",
+		                      "/api/v1/admin/verify",
+		                      "/api/v1/admin/all",
+		                      "/api/v1/admin/{id}",
+		                      "/api/v1/admin/{id}/{status}",
+		                      "/api/v1/admin/allRestaurant",
+		                      "/api/v1/rest/{id}/{status}",
+		                      "/api/v1/admin/allverified",
+		                      "/api/v1/rest/dataOfRest",
+		                      "/api/v1/admin/verificationData/{id}",
+		                      "/api/v1/admin/RestaurantReject/{restId}"
                             };
    private String owner[]= {
 			              "/api/v1/rest/save",
@@ -61,7 +76,7 @@ public class SecurityConfig {
 			              "/api/v1/category/save",
 			              "/api/v1/category/update",
 			              "/api/v1/food/save",
-
+			              "/api/v1/globalCategory/AllCatName",
 	                       };
  
    private String customer[]= {
@@ -94,8 +109,8 @@ public class SecurityConfig {
 		.disable()
 		.authorizeRequests()
 		.requestMatchers(permitAll).permitAll()
-		.requestMatchers(admin).hasAuthority("ADMIN")
 		.requestMatchers(owner).hasAuthority("OWNER")
+		.requestMatchers(admin).hasAuthority("ADMIN")
 		.requestMatchers(customer).hasAuthority("CUSTOMER")
 		.requestMatchers(boy).hasAuthority("BOY")
 		.anyRequest().authenticated()

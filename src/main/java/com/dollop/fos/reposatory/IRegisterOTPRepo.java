@@ -9,5 +9,5 @@ import com.dollop.fos.entity.RegisterOtp;
 public interface IRegisterOTPRepo extends JpaRepository<RegisterOtp,String> {
 
 	Optional<RegisterOtp> findByEmail(String email);
-
+    
 }
