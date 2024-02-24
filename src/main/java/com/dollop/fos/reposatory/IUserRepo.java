@@ -36,4 +36,6 @@ public interface IUserRepo extends JpaRepository<User, String> {
 	           "WHERE u.email = :email")
 	    String findRoleNameByEmail(@Param("email") String email);
 
+	
+
 }

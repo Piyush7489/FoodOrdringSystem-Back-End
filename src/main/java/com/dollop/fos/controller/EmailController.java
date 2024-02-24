@@ -28,9 +28,11 @@ public class EmailController {
 	@PostMapping("/sentEmail")
 	public ResponseEntity<?> sentEmail(@RequestBody EmailRequest emailRequest)
 	{
-		System.err.println(emailRequest);
-		return this.emailService.sendEmail(emailRequest.getSubject(), emailRequest.getMessage(), emailRequest.getSendTo());
-		
+		return this.emailService.sendEmail(emailRequest.getSubject(), emailRequest.getMessage(), emailRequest.getSendTo());	
 	}
-	
+	@PostMapping("/forget-pass")
+	public ResponseEntity<?> forgetPassEmail(@RequestBody EmailRequest emailRequest)
+	{
+		return this.emailService.forgetPassEmail(emailRequest.getSubject(), emailRequest.getMessage(), emailRequest.getSendTo());	
+	}
 }

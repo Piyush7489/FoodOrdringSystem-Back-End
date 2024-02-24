@@ -41,7 +41,7 @@ public class ImageServiceImpl implements IImageService{
 		Map uploadResponse;
 		try {
 //			Files.copy(file.getInputStream(),Paths.get(currentDir , randomName), StandardCopyOption.REPLACE_EXISTING);
-			uploadResponse = cloudinary.uploader().upload(Dir.getBytes(),
+			uploadResponse = cloudinary.uploader().upload(file.getBytes(),
 					  ObjectUtils.asMap("public_id", Dir +"/"+randomName));
 			return (String)uploadResponse.get("secure_url");
 		} catch (IOException e) {

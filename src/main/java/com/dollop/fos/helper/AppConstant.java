@@ -51,7 +51,7 @@ public class AppConstant {
 //	public static final Object LIST_OF_DELIVERY_BOY_NOT_FOUND = "list of Delivery boy Not Found..!!";
 //	
 //    /*update Constant*/	
-//	public static final Object RESTAURANT_UPDATE_SUCCESS = "Restaurant Update Successfully..!!";
+	public static final Object RESTAURANT_UPDATE_SUCCESS = "Restaurant Update Successfully..!!";
 //	public static final Object CATEGORY_UPDATE_SUCCESS="Category Updated Successfully..!!";
 //	public static final Object TABLE_UPDATE_SUCCESS = "Table Updated Successfully..!!";
 	public static final Object USER_CREATED = " Signup Successfully..!!";
@@ -124,6 +124,11 @@ public class AppConstant {
 
 	public static final Object ADD_WISHLIST = "Added to your Wishlist";
 	public static final Object REMOVE_ITEM_FROM_WISHLIST = "Remove From your Wishlist";
+	public static final Object CATEGORY_DELETE_SUCCESS = "Category Deleted Successfully...!!";
+	public static final Object USER_IS_VALID = "User is Valid...";
+	public static final Object EMAIL_INVALID = "InValid Email...";
+	public static final Object INVALID_USER = "Invalid User...";
+	public static final Object PASSWORD_CHANGE = "Password Change Successfully..";
 	
 
 	

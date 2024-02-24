@@ -14,7 +14,6 @@ import lombok.ToString;
 public class CheckOTPRequest {
 
 	private String email;
-
 	private Integer otp;
 
 }

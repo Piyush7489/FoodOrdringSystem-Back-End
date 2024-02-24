@@ -1,5 +1,6 @@
 package com.dollop.fos.response;
 
+import com.dollop.fos.NonNull;
 import com.dollop.fos.requests.RestaurantRequest;
 
 import lombok.AllArgsConstructor;
@@ -16,10 +17,13 @@ import lombok.ToString;
 @Setter
 @ToString
 public class GlobalCategoryResponse {
-	
+	@NonNull
 	private String catId;
+	@NonNull
 	private String catName;
+	@NonNull
 	private String catDescription;
+	@NonNull
 	private Boolean isActive;
 	
 

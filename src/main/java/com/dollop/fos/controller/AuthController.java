@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,5 +49,15 @@ public class AuthController {
 	public ResponseEntity<?> curretUser(Principal p)
 	{
 		return this.service.curentUser(p);
+	}
+	@GetMapping("/check/{email}")
+	public ResponseEntity<?> Emailcheak(@PathVariable String email)
+	{
+	   return 	this.service.checkEmail(email);
+	}
+	@GetMapping("/new-pass/{email}/{pass}")
+	public ResponseEntity<?> newPassForForgetPass(@PathVariable String email,@PathVariable String pass)
+	{
+      return this.service.newPassForForgetPass(email, pass);		
 	}
 }
