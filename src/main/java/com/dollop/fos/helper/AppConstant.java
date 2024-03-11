@@ -36,7 +36,7 @@ public class AppConstant {
 //
 //	/*Add Constant*/
 	public static final String RESTAURANT_ADD_SUCCESS = "Restaurant Added Successfully..!!";
-//	public static final String RESTAURANT_DELETE_SUCCESS = "Restaurant Deleted Successfully..!!";
+	public static final String RESTAURANT_DELETE_SUCCESS = "Restaurant Deleted Successfully..!!";
 //	public static final String RESTAURANT_DELETE_FAILED = "Restaurant Deletion Failed..!!";
 //	public static final Object TABLE_SAVE_SUCCESSFULLY = "Table Added Successfully..!!";
 	public static final Object CATEGORY_ADD_SUCCESS = "Category Added Successfully..!!";
@@ -56,7 +56,7 @@ public class AppConstant {
 //	public static final Object TABLE_UPDATE_SUCCESS = "Table Updated Successfully..!!";
 	public static final Object USER_CREATED = " Signup Successfully..!!";
 	public static final Object USER_NOT_CREATED = "ERROR in create User..!!";
-//	public static final Object FOOD_UPDATE_SUCCESS = "Food Update Successfully..!!";
+	public static final Object FOOD_UPDATE_SUCCESS = "Food Update Successfully..!!";
 //	public static final Object USER_UPDATE_FAILED = "User Updation Faild..!!";
 //    
 //
@@ -66,9 +66,9 @@ public class AppConstant {
 //	public static final Object USER_DELETE_FAILD = "Customer is not deleted..!!";
 //	
 ////	CHANGE PASSWORD
-//	public static final String OLD_PASS_INCORRECT="Your old password was entered incorrectly..!!";
-//	public static final String PASSWORD_NOT_VERIFY="New password and Verify password does not match..!!";
-//	public static final String PASSWORD_CHANGED="Your password is changed successfuly...!!";
+	public static final String OLD_PASS_INCORRECT="Your old password was entered incorrectly..!!";
+	public static final String PASSWORD_NOT_VERIFY="New password and Verify password does not match..!!";
+	public static final String PASSWORD_CHANGED="Your password is changed successfuly...!!";
 //	// COMMAN
 //
 	public static final Long OTP_TIME_DIFERENCE = (long) 5;
@@ -129,6 +129,7 @@ public class AppConstant {
 	public static final Object EMAIL_INVALID = "InValid Email...";
 	public static final Object INVALID_USER = "Invalid User...";
 	public static final Object PASSWORD_CHANGE = "Password Change Successfully..";
+	public static final Object REST_ALREADY_EXIST = "Restaurant Already Exist..!!";
 	
 
 	

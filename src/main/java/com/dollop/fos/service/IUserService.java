@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import org.springframework.http.ResponseEntity;
 
+import com.dollop.fos.requests.ChangePasswordRequest;
 import com.dollop.fos.requests.SignupRequest;
 
 
@@ -14,4 +15,7 @@ public interface IUserService {
 	public ResponseEntity<?> curentUser(Principal p);
 	public ResponseEntity<?> checkEmail(String email);
 	public ResponseEntity<?> newPassForForgetPass(String email,String pass);
+	public ResponseEntity<?> changePassword(ChangePasswordRequest cpr,Principal principal);
+	
+	
 }

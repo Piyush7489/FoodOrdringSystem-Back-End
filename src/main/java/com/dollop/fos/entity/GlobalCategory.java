@@ -18,7 +18,6 @@ import lombok.Setter;
 	@NoArgsConstructor
 	@Setter
 	@Getter
-//	@ToString
 	public class GlobalCategory {
 
 		@Id

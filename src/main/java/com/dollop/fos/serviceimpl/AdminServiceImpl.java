@@ -2,46 +2,38 @@ package com.dollop.fos.serviceimpl;
 
 
 
-import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.ExampleMatcher.StringMatcher;
+
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import com.dollop.fos.entity.Category;
 import com.dollop.fos.entity.Food;
 import com.dollop.fos.entity.GlobalCategory;
 import com.dollop.fos.entity.Restaurant;
+import com.dollop.fos.entity.User;
 import com.dollop.fos.helper.AppConstant;
-import com.dollop.fos.paginationdto.PageFoodResponse;
-import com.dollop.fos.paginationdto.PageGlobalCategoryResponse;
-import com.dollop.fos.paginationdto.PageRestaurantResponsee;
-import com.dollop.fos.reposatory.IFoodRepo;
 import com.dollop.fos.reposatory.IGlobalCaregoryRepo;
 import com.dollop.fos.reposatory.IRestaurantRepo;
+import com.dollop.fos.reposatory.IUserRepo;
 import com.dollop.fos.requests.AddFoodRequest;
-import com.dollop.fos.requests.CategorySaveRequest;
 import com.dollop.fos.requests.RestaurantRequest;
 import com.dollop.fos.requests.RestaurantVerificationRequest;
 import com.dollop.fos.response.FoodResponse;
-import com.dollop.fos.response.GlobalCategoryResponse;
+import com.dollop.fos.response.OwnerResponse;
+import com.dollop.fos.response.UserResponse;
+import com.dollop.fos.response.ViewRestaurantOfOwnerByAdmin;
 import com.dollop.fos.response.ViewRestaurantResponse;
 import com.dollop.fos.service.IAdminService;
 @Service
@@ -49,17 +41,12 @@ public class AdminServiceImpl implements IAdminService {
 
 	@Autowired
 	private IRestaurantRepo restRepo;
-	
 	@Autowired
 	private ModelMapper modelMapper;
-	
-	@Autowired
-	private IFoodRepo frepo;
-	
 	@Autowired
 	private IGlobalCaregoryRepo grepo;
-
-	
+	@Autowired
+	private IUserRepo urepo;
 	@Override
 	public ResponseEntity<?> verifyRestaurant(String restId) {
 		// TODO Auto-generated method stub
@@ -178,38 +165,7 @@ public class AdminServiceImpl implements IAdminService {
 		}
 		
 	}
-	@Override
-	public ResponseEntity<?> viewAllRestaurant(int pageno,int pageSize,String sortBy,RestaurantRequest request) {
-		// TODO Auto-generated method stub
-		Map<String,Object> response = new HashMap<>();
-		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
-				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.CONTAINING)
-				.withIgnoreCase()
-				.withMatcher("restId", match->match.transform(value->value.map(id->(id=="")?null:id)));
-		Example<Restaurant> example = Example.of(restaurantRequestToRestaurant(request),exampleMatcher);
-		Pageable pageable = PageRequest.of(pageno, pageSize,Sort.Direction.ASC,sortBy);
-		Page<Restaurant> findAllRestaurant = this.restRepo.findAll(example,pageable);
-		Page<ViewRestaurantResponse> map = findAllRestaurant.map(p-> restToViewRestResponse(p));
-		List<ViewRestaurantResponse> content = map.getContent();
-		List<ViewRestaurantResponse> newList = null;
-		if (content != null && !content.isEmpty()) {
- 			newList =  new ArrayList<>(content);
- 		    Collections.reverse(newList);
- 		    PageRestaurantResponsee prr = new PageRestaurantResponsee();
- 		    System.out.println(newList);
- 			prr.setContents(newList);
- 			prr.setTotalElements(findAllRestaurant.getTotalElements());
- 			response.put(AppConstant.DATA, prr);
- 			return ResponseEntity.status(HttpStatus.OK).body(response);
- 		}
- 		else
- 		{
- 			response.put(AppConstant.ERROR, AppConstant.RESTAURANT_NOT_FOUND);
- 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
- 		}
 	
-	}
 	public Restaurant restaurantRequestToRestaurant(RestaurantRequest restaurantrequest) 
 	{
 		return this.modelMapper.map(restaurantrequest, Restaurant.class);
@@ -227,235 +183,7 @@ public class AdminServiceImpl implements IAdminService {
 		v.setRestDescription(r.getRestDescription());
 		return v;
 	}
-	@Override
-	public ResponseEntity<?> viewAllVerifiedRestaurant(int pageNo, int pageSize, String sortBy,RestaurantRequest request) {
-		Map<String,Object> response = new HashMap<>();
-		request.setIsApprove(AppConstant.VERIFIED);
-		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
-				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.CONTAINING)
-				.withIgnoreCase()
-				.withMatcher("restId", match->match.transform(value->value.map(id->(id=="")?null:id)));
-		Example<Restaurant> example = Example.of(restaurantRequestToRestaurant(request),exampleMatcher);
-		Pageable pageable = PageRequest.of(pageNo, pageSize,Sort.Direction.ASC,sortBy);
-		Page<Restaurant> findAllRestaurant = this.restRepo.findAll(example,pageable);
-		Page<ViewRestaurantResponse> map = findAllRestaurant.map(p-> restToViewRestResponse(p));
-		List<ViewRestaurantResponse> content = map.getContent();
-		List<ViewRestaurantResponse> newList = null;
-		if (content != null && !content.isEmpty()) {
- 			newList =  new ArrayList<>(content);
- 		    Collections.reverse(newList);
- 		    PageRestaurantResponsee prr = new PageRestaurantResponsee();
- 		    System.out.println(newList);
- 			prr.setContents(newList);
- 			prr.setTotalElements(findAllRestaurant.getTotalElements());
- 			response.put(AppConstant.DATA, prr);
- 			return ResponseEntity.status(HttpStatus.OK).body(response);
- 		}
- 		else
- 		{
- 			response.put(AppConstant.ERROR, AppConstant.RESTAURANT_NOT_FOUND);
- 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
- 		}
-	
-	}
-	@Override
-	public ResponseEntity<?> viewAllUnVerifiedRestaurant(int pageNo, int pageSize, String sortBy,RestaurantRequest request) {
-		Map<String,Object> response = new HashMap<>();
-		request.setIsApprove(AppConstant.UNVERIFIED);
-		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
-				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.CONTAINING)
-				.withIgnoreCase()
-				.withMatcher("restId", match->match.transform(value->value.map(id->(id=="")?null:id)));
-		Example<Restaurant> example = Example.of(restaurantRequestToRestaurant(request),exampleMatcher);
-		Pageable pageable = PageRequest.of(pageNo, pageSize,Sort.Direction.ASC,sortBy);
-		Page<Restaurant> findAllRestaurant = this.restRepo.findAll(example,pageable);
-		Page<ViewRestaurantResponse> map = findAllRestaurant.map(p-> restToViewRestResponse(p));
-		List<ViewRestaurantResponse> content = map.getContent();
-		List<ViewRestaurantResponse> newList = null;
-		if (content != null && !content.isEmpty()) {
- 			newList =  new ArrayList<>(content);
- 		    Collections.reverse(newList);
- 		    PageRestaurantResponsee prr = new PageRestaurantResponsee();
- 		    System.out.println(newList);
- 			prr.setContents(newList);
- 			prr.setTotalElements(findAllRestaurant.getTotalElements());
- 			response.put(AppConstant.DATA, prr);
- 			return ResponseEntity.status(HttpStatus.OK).body(response);
- 		}
- 		else
- 		{
- 			response.put(AppConstant.ERROR, AppConstant.RESTAURANT_NOT_FOUND);
- 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
- 		}
-	
-	}
-	@Override
-	public ResponseEntity<?> viewAllUnBlockRestaurant(int pageNo, int pageSize, String sortBy,RestaurantRequest request) {
-		Map<String,Object> response = new HashMap<>();
-		request.setIsApprove(AppConstant.UNBLOCK);
-		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
-				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.CONTAINING)
-				.withIgnoreCase()
-				.withMatcher("restId", match->match.transform(value->value.map(id->(id=="")?null:id)));
-		Example<Restaurant> example = Example.of(restaurantRequestToRestaurant(request),exampleMatcher);
-		Pageable pageable = PageRequest.of(pageNo, pageSize,Sort.Direction.ASC,sortBy);
-		Page<Restaurant> findAllRestaurant = this.restRepo.findAll(example,pageable);
-		Page<ViewRestaurantResponse> map = findAllRestaurant.map(p-> restToViewRestResponse(p));
-		List<ViewRestaurantResponse> content = map.getContent();
-		List<ViewRestaurantResponse> newList = null;
-		if (content != null && !content.isEmpty()) {
- 			newList =  new ArrayList<>(content);
- 		    Collections.reverse(newList);
- 		    PageRestaurantResponsee prr = new PageRestaurantResponsee();
- 		    System.out.println(newList);
- 			prr.setContents(newList);
- 			prr.setTotalElements(findAllRestaurant.getTotalElements());
- 			response.put(AppConstant.DATA, prr);
- 			return ResponseEntity.status(HttpStatus.OK).body(response);
- 		}
- 		else
- 		{
- 			response.put(AppConstant.ERROR, AppConstant.RESTAURANT_NOT_FOUND);
- 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
- 		}
-	
-	}
-	@Override
-	public ResponseEntity<?> viewAllBlockRestaurant(int pageNo, int pageSize, String sortBy,RestaurantRequest request) {
-		Map<String,Object> response = new HashMap<>();
-		request.setIsApprove(AppConstant.BLOCKED);
-		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
-				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.CONTAINING)
-				.withIgnoreCase()
-				.withMatcher("restId", match->match.transform(value->value.map(id->(id=="")?null:id)));
-		Example<Restaurant> example = Example.of(restaurantRequestToRestaurant(request),exampleMatcher);
-		Pageable pageable = PageRequest.of(pageNo, pageSize,Sort.Direction.ASC,sortBy);
-		Page<Restaurant> findAllRestaurant = this.restRepo.findAll(example,pageable);
-		Page<ViewRestaurantResponse> map = findAllRestaurant.map(p-> restToViewRestResponse(p));
-		List<ViewRestaurantResponse> content = map.getContent();
-		List<ViewRestaurantResponse> newList = null;
-		if (content != null && !content.isEmpty()) {
- 			newList =  new ArrayList<>(content);
- 		    Collections.reverse(newList);
- 		    PageRestaurantResponsee prr = new PageRestaurantResponsee();
- 		    System.out.println(newList);
- 			prr.setContents(newList);
- 			prr.setTotalElements(findAllRestaurant.getTotalElements());
- 			response.put(AppConstant.DATA, prr);
- 			return ResponseEntity.status(HttpStatus.OK).body(response);
- 		}
- 		else
- 		{
- 			response.put(AppConstant.ERROR, AppConstant.RESTAURANT_NOT_FOUND);
- 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
- 		}
-	
-	}
-
-	@Override
-	public ResponseEntity<?> viewAllFood(int pageNo, int pageSize, String sortBy, AddFoodRequest request) {
-		// TODO Auto-generated method stub
-		request.setFoodId(null);
-		Food requestToFood = resquestToFood(request);
-		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
-				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.CONTAINING)
-				.withIgnoreCase()
-				.withMatcher("foodId", match->match.transform(value->value.map(id->(((Long)id).intValue()==0)?null:((Long)id).intValue())));
-		Example<Food> example = Example.of(requestToFood, exampleMatcher);
-		Pageable pagebale = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC, "foodId");
-		Page<Food> findAll = this.frepo.findAll(example, pagebale);
-		Page<FoodResponse> map = findAll.map(food->foodToResponse(food));
-		PageFoodResponse pfr = new PageFoodResponse();
-		pfr.setContents(map.getContent());
-		pfr.setTotalElements(map.getTotalElements());
-		return ResponseEntity.status(HttpStatus.OK).body(pfr);
-	
-	}
-	@Override
-	public ResponseEntity<?> viewAllActiveFood(int pageNo, int pageSize, String sortBy, AddFoodRequest request) {
-		// TODO Auto-generated method stub
-		request.setIsAvailable(true);
-		Food requestToFood = resquestToFood(request);
-		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
-				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.CONTAINING)
-				.withIgnoreCase()
-				.withMatcher("foodId", match->match.transform(value->value.map(id->(((Long)id).intValue()==0)?null:((Long)id).intValue())));
-		Example<Food> example = Example.of(requestToFood, exampleMatcher);
-		Pageable pagebale = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC, "foodId");
-		Page<Food> findAll = this.frepo.findAll(example, pagebale);
-		Page<FoodResponse> map = findAll.map(food->foodToResponse(food));
-		PageFoodResponse pfr = new PageFoodResponse();
-		pfr.setContents(map.getContent());
-		pfr.setTotalElements(map.getTotalElements());
-		return ResponseEntity.status(HttpStatus.OK).body(pfr);
-		
-	}
-	@Override
-	public ResponseEntity<?> viewAllInActiveFood(int pageNo, int pageSize, String sortBy, AddFoodRequest request) {
-		request.setIsAvailable(false);
-		Food requestToFood = resquestToFood(request);
-		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
-				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.CONTAINING)
-				.withIgnoreCase()
-				.withMatcher("foodId", match->match.transform(value->value.map(id->(((Long)id).intValue()==0)?null:((Long)id).intValue())));
-		Example<Food> example = Example.of(requestToFood, exampleMatcher);
-		Pageable pagebale = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC, "foodId");
-		Page<Food> findAll = this.frepo.findAll(example, pagebale);
-		Page<FoodResponse> map = findAll.map(food->foodToResponse(food));
-		PageFoodResponse pfr = new PageFoodResponse();
-		pfr.setContents(map.getContent());
-		pfr.setTotalElements(map.getTotalElements());
-		return ResponseEntity.status(HttpStatus.OK).body(pfr);
-	}
-	
-	@Override 
-	public ResponseEntity<?> viewAllGlobalCategory(int pageNo, int pageSize, String sortBy,CategorySaveRequest request) {
-		// TODO Auto-generated method stub
-		GlobalCategory g = requestToGlobalCategory(request);
-		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
-				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.CONTAINING)
-				.withIgnoreCase()
-				.withMatcher("catId", match->match.transform(value->value.map(id->(((Long)id).intValue()==0)?null:((Long)id).intValue())));
-		         Example<GlobalCategory> example = Example.of(g,exampleMatcher);
-		         Pageable pagebale = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC, sortBy);
-		         Page<GlobalCategory> findAll = this.grepo.findAll(example, pagebale);
-		 		 Page<GlobalCategoryResponse> map = findAll.map(globalCategory->globalCatToResponse(globalCategory));
-		 		 PageGlobalCategoryResponse pgcr = new PageGlobalCategoryResponse();
-		 		 pgcr.setContents(map.getContent());
-		 		 pgcr.setTotalElements(map.getTotalElements());
-		 		 pgcr.setTotalPages(map.getTotalPages());
-		return ResponseEntity.status(HttpStatus.OK).body(pgcr);
-	}
-	
-	private GlobalCategoryResponse globalCatToResponse(GlobalCategory globalcat) {
-		// TODO Auto-generated method stub
-		GlobalCategoryResponse g = new GlobalCategoryResponse();
-		g.setCatDescription(globalcat.getCatDescription());
-		g.setCatId(globalcat.getCatId());
-		g.setCatName(globalcat.getCatName());
-		g.setIsActive(globalcat.getIsActive());
-		return g;
-	}
-
-	
-
-
-	private GlobalCategory requestToGlobalCategory(CategorySaveRequest request) {
-		// TODO Auto-generated method stub
-		return this.modelMapper.map(request,GlobalCategory.class);
-		
-	}
-
-
-	public Food resquestToFood(AddFoodRequest foodRequest) 
+		public Food resquestToFood(AddFoodRequest foodRequest) 
 	{
 		return this.modelMapper.map(foodRequest, Food.class);
 	}
@@ -465,12 +193,7 @@ public class AdminServiceImpl implements IAdminService {
 	}
 
 
-	public Category CSRToCategory(CategorySaveRequest csr)
-	{
-		return this.modelMapper.map(csr, Category.class);
-	}
-
-
+	
 	@Override
 	public ResponseEntity<?> viewAllCategory() {
 		// TODO Auto-generated method stub
@@ -533,19 +256,104 @@ public class AdminServiceImpl implements IAdminService {
 		r1.setRestImage(r.getRestImageName());
 		return r1;
 	}
+
+
+	@Override
+	public ResponseEntity<?> getCustomerList(int page, int size) {
+		// TODO Auto-generated method stub
+		
+		Map<String,Object> response = new HashMap<>();
+		Pageable pageable = PageRequest.of(page, size);
+		Page<User> customer = this.urepo.findByRoleName("CUSTOMER",pageable);
+		System.err.println(customer.getContent());
+		List<UserResponse> customerlist = customer.getContent().stream().map(this::userToUserResponse).collect(Collectors.toList());
+		Page page1 = new PageImpl<>(customerlist,pageable,customer.getTotalElements());
+		response.put(AppConstant.RESPONSE_MESSAGE, page1);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+
+	}
 	
-//	public AllCategoryResponse CategoryToACR(Category cat)
-//	{
-////		String email = cat.getRestaurant().getOwner().getEmail();
-//		AllCategoryResponse map = this.modelMapper.map(cat, AllCategoryResponse.class);
-////		map.setOwnerEmail(email);
-//		return map;
-//	}
+	private UserResponse userToUserResponse(User u) {
+		UserResponse userResponse = new UserResponse();
+		userResponse.setUserId(u.getUserId());
+		userResponse.setFirstName(u.getFirstName());
+		userResponse.setLastName(u.getLastName());
+		userResponse.setMob(u.getMob());
+		userResponse.setCreateAt(u.getCreateAt());
+		userResponse.setProfilePhoto(u.getProfilePhoto());
+		userResponse.setTempAddress(u.getTempAddress());
+		userResponse.setIsActive(u.getIsActive());
+		userResponse.setEmail(u.getEmail());
+		return userResponse;
+	}
 
 
+	@Override
+	public ResponseEntity<?> getOwnerList(int page, int size) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		Pageable pageable = PageRequest.of(page, size);
+		Page<User> owner = this.urepo.findByRoleName("OWNER",pageable);
+		
+		List<OwnerResponse> ownerList = owner.getContent().stream().map(this::ownerToOwnerResponse).collect(Collectors.toList());
+		Page page1 = new PageImpl<>(ownerList,pageable,owner.getTotalElements());
+		response.put(AppConstant.RESPONSE_MESSAGE, page1);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
 	
+	private OwnerResponse ownerToOwnerResponse(User u) 
+	{
+		OwnerResponse ownerResponse = new OwnerResponse();
+		ownerResponse.setUserId(u.getUserId());
+		ownerResponse.setCreateAt(u.getCreateAt());
+		ownerResponse.setEmail(u.getEmail());
+		ownerResponse.setFirstName(u.getFirstName());
+		ownerResponse.setLastName(u.getLastName());
+		ownerResponse.setMob(u.getMob());
+		ownerResponse.setProfilePhoto(u.getProfilePhoto());
+		ownerResponse.setTempAddress(u.getTempAddress());
+		return ownerResponse;
+	}
 
+
+	@Override
+	public ResponseEntity<?> getAllRestaurantofOwnerId(String ownerId) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		List<Restaurant> list = this.restRepo.getRestaurantByOwnerId(ownerId);
+		List<ViewRestaurantOfOwnerByAdmin> viewList = list.stream().map(this::restToviewRestResponseofOwner).collect(Collectors.toList());
+		response.put(AppConstant.RESPONSE_MESSAGE, viewList);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
 	
+	private ViewRestaurantOfOwnerByAdmin restToviewRestResponseofOwner(Restaurant r) 
+	{
+		ViewRestaurantOfOwnerByAdmin v = new ViewRestaurantOfOwnerByAdmin();
+		v.setRestId(r.getRestId());
+		v.setCity(r.getRestAddress().getCity());
+		v.setCreatedat(r.getCreatedAt());
+		v.setCurrentStatus(r.getCurrentStatus());
+		v.setFssaiLicenceNo(r.getFssaiLicense().getLicenseNumber());
+		v.setFssaiLicencePhoto(r.getFssaiLicense().getFssaiLicensePhoto());
+		v.setGstLicenceNo(r.getGstRegistration().getLicenseNumber());
+		v.setGstLicencePhoto(r.getFssaiLicense().getFssaiLicensePhoto());
+		v.setIsActive(r.getIsActive());
+		v.setRestCloseTime(r.getRestCloseTime());
+		v.setRestContect(r.getRestAddress().getRestContect());
+		v.setRestOpenTime(r.getRestOpenTime());
+		v.setRestImage(r.getRestImageName());
+		v.setRestName(r.getRestName());
+		v.setRestDescription(r.getRestDescription());
+		v.setState(r.getRestAddress().getState());
+		v.setIsApprove(r.getIsApprove());		
+		return v;
+	}
 
+
+	@Override
+	public ResponseEntity<?> getAllDeliveryBoyList(int page, int size) {
+		// TODO Auto-generated method stub
+		return null;
+	} 
 	
 }

@@ -13,4 +13,5 @@ public interface IGlobalCategoryService {
 	public ResponseEntity<?> updateActiveStatus(String id,boolean active);
 	public ResponseEntity<?> getData(int page,int size);
 	public ResponseEntity<?> getAllActiveCategoryName();
+	public ResponseEntity<?> getCategoryByRestId(String restId);
 }

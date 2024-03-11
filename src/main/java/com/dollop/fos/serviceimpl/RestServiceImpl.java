@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,6 +40,8 @@ import com.dollop.fos.requests.FsseiLicenseRequest;
 import com.dollop.fos.requests.GstRegistrationRequest;
 import com.dollop.fos.requests.RestAddressRequest;
 import com.dollop.fos.requests.RestSaveRequest;
+import com.dollop.fos.response.RestNameResponse;
+import com.dollop.fos.response.ViewRestaurantOfOwnerByAdmin;
 import com.dollop.fos.response.ViewRestaurantResponse;
 import com.dollop.fos.service.IRestaurantService;
 import com.dollop.fos.utility.IImageService;
@@ -73,16 +77,17 @@ public class RestServiceImpl implements IRestaurantService {
 		// TODO Auto-generated method stub
 		
 		Map<String,Object> response = new HashMap<>();
-		System.err.println("1");
-		Restaurant r = this.setRestData(rest,p);
+
 		
-		Restaurant r1 = this.repo.findByRestName(r.getRestName());
+		
+		Restaurant r1 = this.repo.findByRestName(rest.getRestName());
 		if(r1!=null) 
 		{
 			response.put(AppConstant.ERROR, AppConstant.RESTAURANT_FOUND);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}else 
 		{
+		Restaurant r = this.setRestData(rest,p);
 		String imageName;	
 		
 		try {
@@ -98,10 +103,8 @@ public class RestServiceImpl implements IRestaurantService {
 		List<String> restCategory = rest.getRestCategory();
 		for(String rcr :restCategory )
 		{
-			System.err.println(rcr);
 			GlobalCategory globalCategory = this.gRepo.findWithId(rcr);
 			abc.add(globalCategory);
-			System.err.println(globalCategory);
 		}
 		this.setDataInRestCategory(abc,save);
 		response.put(AppConstant.RESPONSE_MESSAGE,AppConstant.RESTAURANT_ADD_SUCCESS);
@@ -239,7 +242,7 @@ public class RestServiceImpl implements IRestaurantService {
 	@Override
 	public ResponseEntity<?> getDataofRestaurant(int page, int size) {
 		// TODO Auto-generated method stub
-		Map<String,Object> response = new HashMap<>();
+		 Map<String,Object> response = new HashMap<>();
 		 Pageable pageable = PageRequest.of(page, size);
 		 Page <Restaurant>restaurant= repo.findAll(pageable);
 		 List<ViewRestaurantResponse> viewRestaurant = restaurant.getContent().stream().map(this::restToViewRestResponse) .collect(Collectors.toList());
@@ -247,6 +250,8 @@ public class RestServiceImpl implements IRestaurantService {
 		 response.put(AppConstant.RESPONSE_MESSAGE, page1);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
+	
+	
 	private ViewRestaurantResponse restToViewRestResponse(Restaurant r) {
 		ViewRestaurantResponse v = new ViewRestaurantResponse();
 		v.setRestId(r.getRestId());
@@ -259,6 +264,185 @@ public class RestServiceImpl implements IRestaurantService {
 		v.setRestOpenTime(r.getRestOpenTime());
 		v.setRestDescription(r.getRestDescription());
 		return v;
+	}
+
+	@Override
+	public ResponseEntity<?> editRestaurant(ViewRestaurantResponse rest, Principal p) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		
+//		Restaurant r1 = this.repo.findByRestId(rest.getRestId());
+//		if(r1.getIsApprove().equals(AppConstant.UNVERIFIED)) 
+//		{
+//			response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.WAIT_FOR_APPROVAL_RESTAURANT);
+//			return ResponseEntity.status(HttpStatus.OK).body(response);
+//		}else if(r1.getIsBlocked().equals(AppConstant.UNBLOCK)) 
+//		{
+//			response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.WAIT_FOR_APPROVAL_RESTAURANT);
+//			return ResponseEntity.status(HttpStatus.OK).body(response);
+//		}
+		Optional<Restaurant> restaurant = this.repo.findByRestNameAndRestIdNot(rest.getRestName(), rest.getRestId());
+	    if(restaurant.isEmpty()) 
+	    {
+	    	Restaurant r = this.repo.findByRestId(rest.getRestId());
+	    	System.err.println(r);
+	    	r.setRestId(rest.getRestId());
+	    	r.setRestName(rest.getRestName());
+	    	r.setRestCloseTime(rest.getRestCloseTime());
+	    	r.setRestOpenTime(rest.getRestOpenTime());
+	    	r.setRestDescription(rest.getRestDescription());
+	    	r.setIsActive(rest.getIsActive());
+	    	r.setCurrentStatus(rest.getCurrentStatus());
+	    	r.setUpdateAt(LocalDateTime.now());
+	    	String imageName;
+	    	try {
+	    		System.err.println(Objects.nonNull(rest.getImageName()));
+	    		if(Objects.nonNull(rest.getImageName())) 
+	    		{
+	    		System.err.println("inside if");
+				imageName=this.iService.uploadImage(rest.getImageName(), FolderName.RESTAURANT);
+				r.setRestImageName(imageName);
+	    		}else 
+	    		{
+	  
+	    			//r.setRestImageName(r.getRestImageName());
+	    		}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	
+	    	RestAddress a = new RestAddress();
+	    	a.setCity(rest.getCity());
+	    	a.setLatitude(rest.getLatitude());
+	    	a.setLongitude(rest.getLongitude());
+	    	a.setRestAddressId(rest.getRestAddressId());
+	    	a.setRestContect(rest.getRestContect());
+	    	a.setState(rest.getState());
+	    	a.setStreet(rest.getStreet());
+	    	a.setZipCode(rest.getZipCode());
+	    	r.setRestAddress(a);
+	    	
+	    	 this.repo.save(r);
+	    	 ViewRestaurantResponse res = this.setDataInViewRestaurantResponse(r);
+	    	response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.RESTAURANT_UPDATE_SUCCESS);
+	    	response.put(AppConstant.DATA, res);
+	    	return ResponseEntity.status(HttpStatus.OK).body(response);
+	    }    
+	    else {
+		response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.REST_ALREADY_EXIST);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	    }
+	}
+
+	@Override
+	public ResponseEntity<?> viewRestaurantOfOwner(Principal p) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		User owner = this.urepo.findByEmail(p.getName());
+		List<Restaurant> rest = this.repo.getRestaurantByOwnerId(owner.getUserId());
+		List<ViewRestaurantOfOwnerByAdmin> viewList = rest.stream().map(this::restToviewRestResponseofOwner).collect(Collectors.toList());
+		response.put(AppConstant.RESPONSE_MESSAGE, viewList);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+	private ViewRestaurantOfOwnerByAdmin restToviewRestResponseofOwner(Restaurant r) 
+	{
+		ViewRestaurantOfOwnerByAdmin v = new ViewRestaurantOfOwnerByAdmin();
+		v.setRestId(r.getRestId());
+		v.setCity(r.getRestAddress().getCity());
+		v.setCreatedat(r.getCreatedAt());
+		v.setCurrentStatus(r.getCurrentStatus());
+		v.setFssaiLicenceNo(r.getFssaiLicense().getLicenseNumber());
+		v.setFssaiLicencePhoto(r.getFssaiLicense().getFssaiLicensePhoto());
+		v.setGstLicenceNo(r.getGstRegistration().getLicenseNumber());
+		v.setGstLicencePhoto(r.getFssaiLicense().getFssaiLicensePhoto());
+		v.setIsActive(r.getIsActive());
+		v.setRestCloseTime(r.getRestCloseTime());
+		v.setRestContect(r.getRestAddress().getRestContect());
+		v.setRestOpenTime(r.getRestOpenTime());
+		v.setRestImage(r.getRestImageName());
+		v.setRestName(r.getRestName());
+		v.setRestDescription(r.getRestDescription());
+		v.setState(r.getRestAddress().getState());
+		v.setIsApprove(r.getIsApprove());		
+		return v;
+	}
+
+	@Override
+	public ResponseEntity<?> getRestaurantByRestId(String restId) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		Restaurant r = this.repo.findByRestId(restId);
+		ViewRestaurantResponse v = setDataInViewRestaurantResponse(r);
+		response.put(AppConstant.RESPONSE_MESSAGE, v);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	private ViewRestaurantResponse setDataInViewRestaurantResponse(Restaurant r) {
+		// TODO Auto-generated method stub
+		ViewRestaurantResponse v = new ViewRestaurantResponse();
+		v.setCity(r.getRestAddress().getCity());
+		v.setCreatedAt(r.getCreatedAt().toString());
+		v.setCurrentStatus(r.getCurrentStatus());
+		v.setIsActive(r.getIsActive());
+		v.setIsApprove(r.getIsApprove());
+		v.setIsBlocked(r.getIsBlocked());
+		v.setLatitude(r.getRestAddress().getLatitude());
+		v.setLongitude(r.getRestAddress().getLongitude());
+		v.setRestAddressId(r.getRestAddress().getRestAddressId());
+		v.setRestCloseTime(r.getRestCloseTime());
+		v.setRestOpenTime(r.getRestOpenTime());
+		v.setRestContect(r.getRestAddress().getRestContect());
+		v.setRestDescription(r.getRestDescription());
+		v.setRestId(r.getRestId());
+		v.setRestImage(r.getRestImageName());
+		v.setRestName(r.getRestName());
+		v.setState(r.getRestAddress().getState());
+		v.setStreet(r.getRestAddress().getStreet());
+		v.setZipCode(r.getRestAddress().getZipCode());
+		v.setGstLicenceNo(r.getGstRegistration().getLicenseNumber());
+		v.setFssaiLicenceNo(r.getFssaiLicense().getLicenseNumber());
+		System.err.println(v);
+		return v;
+	}
+
+	@Override
+	public ResponseEntity<?> deleteRestaurant(String restId) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		Restaurant r = this.repo.findByRestId(restId);
+		r.setIsActive(false);
+		response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.RESTAURANT_DELETE_SUCCESS);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	@Override
+	public ResponseEntity<?> getRestaurauntNameAndCategoryofOwner(Principal p) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		User owner = this.urepo.findByEmail(p.getName());
+       
+		
+		return null;
+	}
+
+	@Override
+	public ResponseEntity<?> getRestaurantNameOfOWner(Principal p) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		User owner = this.urepo.findByEmail(p.getName());
+		List<Restaurant> rest = this.repo.getApproveRestaurantByOwnerId(owner.getUserId(),AppConstant.VERIFIED);
+		List<RestNameResponse> viewList = rest.stream().map(this::restTorestname).collect(Collectors.toList());
+		response.put(AppConstant.RESPONSE_MESSAGE, viewList);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	private RestNameResponse restTorestname(Restaurant r) 
+	{
+		RestNameResponse rn = new RestNameResponse();
+		rn.setRid(r.getRestId());
+		rn.setRName(r.getRestName());
+		return rn;
 	}
 
 }

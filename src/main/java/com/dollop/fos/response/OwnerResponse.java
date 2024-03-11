@@ -1,19 +1,18 @@
 package com.dollop.fos.response;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.dollop.fos.NonNull;
+import com.dollop.fos.entity.Restaurant;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
-public class UserResponse {
+public class OwnerResponse {
 
 	@NonNull
 	private String userId;
@@ -24,8 +23,6 @@ public class UserResponse {
 	@NonNull
 	private String email;
 	@NonNull
-	private String password;
-	@NonNull
 	private String mob;
 	@NonNull
 	private String tempAddress;
@@ -35,7 +32,5 @@ public class UserResponse {
 	private Boolean isActive;
 	@NonNull
 	private String profilePhoto;
-	@NonNull
-	private String userRole;
 	
 }

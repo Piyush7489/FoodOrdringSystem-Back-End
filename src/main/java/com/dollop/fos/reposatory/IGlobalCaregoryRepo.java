@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.dollop.fos.entity.GlobalCategory;
+import com.dollop.fos.response.GlobalCategoryNameResponse;
 
 public interface IGlobalCaregoryRepo extends JpaRepository<GlobalCategory, String> {
 
@@ -31,4 +32,7 @@ public interface IGlobalCaregoryRepo extends JpaRepository<GlobalCategory, Strin
 	
 
 	List<GlobalCategory> findByIsActiveIsTrue();
+	
+	 @Query("SELECT new com.dollop.fos.response.GlobalCategoryNameResponse(g.catId, g.catName) FROM RestaurantCategory rc JOIN GlobalCategory g ON rc.globalCategory.catId=g.catId  WHERE rc.restaurant.restId = :restaurantId")
+	    List<GlobalCategoryNameResponse> findCatIdAndCatNameByRestaurantId(@Param("restaurantId") String restaurantId);
 }

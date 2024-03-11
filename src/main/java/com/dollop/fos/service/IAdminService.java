@@ -15,18 +15,12 @@ public interface IAdminService {
 	public ResponseEntity<?> unVerifyRestaurant(String restId);
 	public ResponseEntity<?> blockedRestaurant(String restId);
 	public ResponseEntity<?> unblockedRestaurant(String restId);
-	public ResponseEntity<?> viewAllRestaurant(int pageNo,int pageSize,String sortBy,RestaurantRequest request);
-	public ResponseEntity<?> viewAllVerifiedRestaurant(int pageNo,int pageSize,String sortBy,RestaurantRequest request);
-    public ResponseEntity<?> viewAllUnVerifiedRestaurant(int pageNo,int pageSize,String sortBy,RestaurantRequest request);
-    public ResponseEntity<?> viewAllUnBlockRestaurant(int pageNo,int pageSize,String sortBy,RestaurantRequest request);
-    public ResponseEntity<?> viewAllBlockRestaurant(int pageNo,int pageSize,String sortBy,RestaurantRequest request);
-    public ResponseEntity<?> viewAllFood(int pageNo,int pageSize,String sortBy,AddFoodRequest request);
-	public ResponseEntity<?> viewAllActiveFood(int pageNo,int pageSize,String sortBy,AddFoodRequest request);
-	public ResponseEntity<?> viewAllInActiveFood(int pageNo,int pageSize,String sortBy,AddFoodRequest request);
-	public ResponseEntity<?> viewAllGlobalCategory(int pageNo,int pageSize,String sortBy,CategorySaveRequest request);
 	public ResponseEntity<?> viewAllCategory();
 	public ResponseEntity<?> viewAllRestaurant();
 	public ResponseEntity<?> viewVerifiedRestaurant();
 	public ResponseEntity<?> verificationOfRestaurant(String id);
-	
+	public ResponseEntity<?> getCustomerList(int page,int size);
+	public ResponseEntity<?> getOwnerList(int page,int size);
+	public ResponseEntity<?> getAllDeliveryBoyList(int page,int size);
+	public ResponseEntity<?> getAllRestaurantofOwnerId(String ownerId);
 }

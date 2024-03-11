@@ -19,6 +19,7 @@ import com.dollop.fos.entity.GlobalCategory;
 import com.dollop.fos.helper.AppConstant;
 import com.dollop.fos.reposatory.IGlobalCaregoryRepo;
 import com.dollop.fos.requests.GlobalCategoryRequest;
+import com.dollop.fos.response.GlobalCategoryNameResponse;
 import com.dollop.fos.response.GlobalCategoryResponse;
 import com.dollop.fos.service.IGlobalCategoryService;
 @Service
@@ -26,6 +27,7 @@ import com.dollop.fos.service.IGlobalCategoryService;
 public class GlobalCategoryServiceImpl implements IGlobalCategoryService{
     @Autowired
 	private IGlobalCaregoryRepo repo;
+    
     
     @Autowired
     private ModelMapper mapper;
@@ -162,6 +164,16 @@ public class GlobalCategoryServiceImpl implements IGlobalCategoryService{
 		List<GlobalCategory> list = this.repo.findByIsActiveIsTrue();
 		List<GlobalCategoryResponse> view = list.stream().map(category->new GlobalCategoryResponse(category.getCatId(), category.getCatName(), null, null)).collect(Collectors.toList());
 		response.put(AppConstant.RESPONSE_MESSAGE, view);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+
+	@Override
+	public ResponseEntity<?> getCategoryByRestId(String restId) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+	   List<GlobalCategoryNameResponse> list = this.repo.findCatIdAndCatNameByRestaurantId(restId);
+	    response.put(AppConstant.RESPONSE_MESSAGE, list);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
