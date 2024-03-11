@@ -80,7 +80,6 @@ public class WishListServiceImpl implements IWishListService {
 		    Food f = w.getFood();
 		    WishListRespose r = new WishListRespose();
 		    r.setFoodCategoryName(f.getFoodName());
-		    r.setFoodCategoryName(f.getFoodCategoryName());
 		    r.setFoodDescription(f.getFoodDescription());
 		    r.setFoodImage(f.getImageName());
 		    r.setFoodName(f.getFoodName());

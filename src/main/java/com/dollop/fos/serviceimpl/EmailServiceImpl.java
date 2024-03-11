@@ -50,6 +50,7 @@ public class EmailServiceImpl implements IEmailService {
 		// TODO Auto-generated method stub
 		System.err.println("oooo");
 		 Boolean flag = false;
+		 System.err.println(sendTo);
 	      Optional<RegisterOtp> optional = otpRepo.findByEmail(sendTo);	
 	      Map<String, Object> response = new HashMap<>();
 	      if(optional.isEmpty() )

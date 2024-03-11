@@ -26,12 +26,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.dollop.fos.customexceptions.ResourceFoundException;
+import com.dollop.fos.entity.Restaurant;
 import com.dollop.fos.entity.Role;
 import com.dollop.fos.entity.User;
 import com.dollop.fos.entity.UserRole;
 import com.dollop.fos.helper.AppConstant;
 import com.dollop.fos.helper.FolderName;
+import com.dollop.fos.reposatory.IRestaurantRepo;
 import com.dollop.fos.reposatory.IUserRepo;
+import com.dollop.fos.requests.ChangePasswordRequest;
 import com.dollop.fos.requests.SignupRequest;
 import com.dollop.fos.response.UserResponse;
 import com.dollop.fos.service.IUserService;
@@ -48,6 +51,8 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 	@Autowired
 	private ModelMapper modelmapper;
 	
+	@Autowired
+	private IRestaurantRepo restRepo;
 //	@Autowired
 //	private IImageService imageService;
 	
@@ -128,7 +133,7 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 			throw new ResourceFoundException(AppConstant.USER_NOT_FOUND);
 		}	
 		user.get().getUserRole().stream().forEach(ur->{
-			System.err.println(ur.getRole().getRoleName());
+			System.err.println(ur.getRole().getRoleName()+"????");
 		});
 		List<GrantedAuthority> authorities = user.get().getUserRole().stream().map(role->new SimpleGrantedAuthority(role.getRole().getRoleName())).collect(Collectors.toList());
             return new org.springframework.security.core.userdetails.User(useremail, user.get().getPassword(), authorities);
@@ -199,6 +204,33 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 		response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.PASSWORD_CHANGE);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
+
+	@Override
+	public ResponseEntity<?> changePassword(ChangePasswordRequest cpr, Principal principal) {
+		// TODO Auto-generated method stub
+		Map<Object,String> response = new HashMap<>();
+		Boolean matches = null;
+		if(cpr.getNewPassword().equals(cpr.getVerifyPassword()))
+		{
+			User user = this.userRepo.findByEmail(principal.getName());
+			matches = pass.matches(cpr.getCurrentPassword(), user.getPassword());
+			if(matches)
+			{
+				user.setPassword(pass.encode(cpr.getVerifyPassword()));
+				this.userRepo.save(user);
+				response.put(matches,AppConstant.PASSWORD_CHANGED);
+				return ResponseEntity.status(HttpStatus.OK).body(response);
+			}
+			else {
+				response.put(matches, AppConstant.OLD_PASS_INCORRECT);
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+			}
+		}
+		response.put(false, AppConstant.PASSWORD_NOT_VERIFY);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	}
+
+
 	
 	
 	

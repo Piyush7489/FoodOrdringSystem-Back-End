@@ -27,7 +27,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @Entity
-@ToString
+
 public class Restaurant {
 
 	@Id
@@ -43,6 +43,7 @@ public class Restaurant {
 	private String isApprove;
 	private String restImageName;
 	private String isBlocked;
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "rest_address_id")
 	private RestAddress restAddress;
@@ -54,12 +55,11 @@ public class Restaurant {
 	private GstRegistration gstRegistration;
 	@ManyToOne
 	@JoinColumn(name = "owner_id")
+	@JsonIgnore
 	private User owner;
-	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
-	@JsonIgnoreProperties(value = "restaurant")
-	private List<Food> listOfFood;
 	@OneToMany(mappedBy = "rest", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties(value = "rest")
+	@JsonIgnore
 	private List<Review> listOfReview = new ArrayList<>();
 	@OneToMany(mappedBy = "restaurant")
 	@JsonIgnore

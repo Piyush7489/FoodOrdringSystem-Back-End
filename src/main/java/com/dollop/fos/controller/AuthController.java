@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dollop.fos.payload.LoginRequest;
+import com.dollop.fos.requests.ChangePasswordRequest;
 import com.dollop.fos.requests.SignupRequest;
 import com.dollop.fos.service.IUserService;
 import com.dollop.fos.utility.JwtUtils;
@@ -59,5 +60,11 @@ public class AuthController {
 	public ResponseEntity<?> newPassForForgetPass(@PathVariable String email,@PathVariable String pass)
 	{
       return this.service.newPassForForgetPass(email, pass);		
+	}
+	
+	@PostMapping("/changePass")
+	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest cpr, Principal principal)
+	{
+		return this.service.changePassword(cpr, principal);
 	}
 }

@@ -36,6 +36,7 @@ public interface IUserRepo extends JpaRepository<User, String> {
 	           "WHERE u.email = :email")
 	    String findRoleNameByEmail(@Param("email") String email);
 
-	
+	 @Query("SELECT u FROM User u INNER JOIN UserRole ur ON u.userId = ur.user.userId INNER JOIN Role r ON ur.role.roleId = r.roleId WHERE r.roleName = :roleName")
+	    Page<User> findByRoleName(@Param("roleName") String roleName, Pageable pageable);
 
 }

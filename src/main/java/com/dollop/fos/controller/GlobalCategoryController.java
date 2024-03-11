@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dollop.fos.requests.GlobalCategoryRequest;
 import com.dollop.fos.service.IGlobalCategoryService;
+
+import jakarta.persistence.criteria.Path;
 @RestController
 @RequestMapping("/api/v1/globalCategory")
 @CrossOrigin
@@ -57,7 +59,11 @@ public class GlobalCategoryController {
 	@GetMapping("/AllCatName")
 	public ResponseEntity<?> getAllActiveCatName()
 	{
-		System.err.println("...");
 		return this.service.getAllActiveCategoryName();
+	}
+	@GetMapping("/cat-name/{restId}")
+	public ResponseEntity<?> findCatnameByRestId(@PathVariable String restId)
+	{
+		return this.service.getCategoryByRestId(restId);
 	}
 }

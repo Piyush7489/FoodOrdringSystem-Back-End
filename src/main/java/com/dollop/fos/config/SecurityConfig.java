@@ -40,22 +40,27 @@ public class SecurityConfig {
 			"/api/v1/emailAPI/forget-pass",
 			 "/api/v1/boy/register",
 			 "/api/v1/auth/check/{email}",
-			 "/api/v1/auth/new-pass/{email}/{pass}"
-			 
+			 "/api/v1/auth/new-pass/{email}/{pass}", 
 	        };
+   private String owner[]={
+           "/api/v1/rest/save",
+           "/api/v1/rest/address/{restId}",
+           "/api/v1/category/save",
+           "/api/v1/category/update",
+           "/api/v1/food/save",
+           "/api/v1/food/update-food",
+           "/api/v1/food/view-food",
+           "/api/v1/globalCategory/AllCatName",
+           "/api/v1/rest/edit-rest",
+           "/api/v1/rest/view-owner-rest",
+           "/api/v1/rest/get/{restId}",
+           "/api/v1/rest/rest-name-of-owner",
+           "/api/v1/globalCategory/cat-name/{restId}"
+            };
    private String admin[]= {
 		                      "/api/v1/admin/RestaurantApprove/{restId}",
 		                      "/api/v1/admin/RestaurantBlock/{restId}",
 		                      "/api/v1/admin/RestaurantUnBlock/{restId}",
-		                      "/api/v1/admin/all/{pn}/{ps}/{sortBy}",
-		                      "/api/v1/admin/Verify/{pn}/{ps}/{sortBy}",
-		                      "/api/v1/admin/UnVerify/{pn}/{ps}/{sortBy}",
-		                      "/api/v1/admin/UnBlock/{pn}/{ps}/{sortBy}",
-		                      "/api/v1/admin/Block/{pn}/{ps}/{sortBy}",
-		                      "/api/v1/admin/AllFood/{pn}/{ps}/{sortBy}",
-		                      "/api/v1/admin/AllActiveFood/{pn}/{ps}/{sortBy}",
-		                      "/api/v1/admin/AllInActiveFood/{pn}/{ps}/{sortBy}",
-		                      "/api/v1/admin/viewCategory/{pn}/{ps}/{sortBy}",
 		                      "/api/v1/globalCategory/data",
 		                      "/api/v1/globalCategory/save",
 		                      "/api/v1/globalCategory/{id}",
@@ -68,16 +73,12 @@ public class SecurityConfig {
 		                      "/api/v1/admin/allverified",
 		                      "/api/v1/rest/dataOfRest",
 		                      "/api/v1/admin/verificationData/{id}",
-		                      "/api/v1/admin/RestaurantReject/{restId}"
+		                      "/api/v1/admin/RestaurantReject/{restId}",
+		                      "/api/v1/admin/customer-list",
+		                      "/api/v1/admin/owner-list",
+		                      "/api/v1/admin/owner-rest/{ownerId}"
                             };
-   private String owner[]= {
-			              "/api/v1/rest/save",
-			              "/api/v1/rest/address/{restId}",
-			              "/api/v1/category/save",
-			              "/api/v1/category/update",
-			              "/api/v1/food/save",
-			              "/api/v1/globalCategory/AllCatName",
-	                       };
+   
  
    private String customer[]= {
 		                        "/api/v1/wish/add",

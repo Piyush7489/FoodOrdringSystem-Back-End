@@ -33,6 +33,7 @@ public class EmailController {
 	@PostMapping("/forget-pass")
 	public ResponseEntity<?> forgetPassEmail(@RequestBody EmailRequest emailRequest)
 	{
+		
 		return this.emailService.forgetPassEmail(emailRequest.getSubject(), emailRequest.getMessage(), emailRequest.getSendTo());	
 	}
 }

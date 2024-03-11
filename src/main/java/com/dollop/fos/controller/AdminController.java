@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.service.annotation.GetExchange;
 
@@ -47,60 +48,6 @@ public class AdminController {
 		return this.service.unblockedRestaurant(restId);
 	}
 
-	@PostMapping("/all/{pn}/{ps}/{sortBy}")
-	public ResponseEntity<?> getAllRestaurant(@PathVariable("pn") int pageNo, @PathVariable("ps") int pageSize,
-			@PathVariable String sortBy, @RequestBody RestaurantRequest request) {
-		return this.service.viewAllRestaurant(pageNo, pageSize, sortBy, request);
-	}
-
-	@PostMapping("/Verify/{pn}/{ps}/{sortBy}")
-	public ResponseEntity<?> viewAllVerifiedRestaurant(@PathVariable("pn") int pageNo, @PathVariable("ps") int pageSize,
-			@PathVariable String sortBy, @RequestBody RestaurantRequest request) {
-		return this.service.viewAllVerifiedRestaurant(pageNo, pageSize, sortBy, request);
-	}
-
-	@PostMapping("/UnVerify/{pn}/{ps}/{sortBy}")
-	public ResponseEntity<?> viewAllUnVerifiedRestaurant(@PathVariable("pn") int pageNo,
-			@PathVariable("ps") int pageSize, @PathVariable String sortBy, @RequestBody RestaurantRequest request) {
-		return this.service.viewAllUnVerifiedRestaurant(pageNo, pageSize, sortBy, request);
-	}
-
-	@PostMapping("/UnBlock/{pn}/{ps}/{sortBy}")
-	public ResponseEntity<?> viewAllUnBlockRestaurant(@PathVariable("pn") int pageNo, @PathVariable("ps") int pageSize,
-			@PathVariable String sortBy, @RequestBody RestaurantRequest request) {
-		return this.service.viewAllUnBlockRestaurant(pageNo, pageSize, sortBy, request);
-	}
-
-	@PostMapping("/Block/{pn}/{ps}/{sortBy}")
-	public ResponseEntity<?> viewAllBlockRestaurant(@PathVariable("pn") int pageNo, @PathVariable("ps") int pageSize,
-			@PathVariable String sortBy, @RequestBody RestaurantRequest request) {
-		return this.service.viewAllBlockRestaurant(pageNo, pageSize, sortBy, request);
-	}
-
-	@PostMapping("/AllFood/{pn}/{ps}/{sortBy}")
-	public ResponseEntity<?> viewAllFood(@PathVariable("pn") int pageNo, @PathVariable("ps") int pageSize,
-			@PathVariable String sortBy, @RequestBody AddFoodRequest request) {
-		return this.service.viewAllFood(pageNo, pageSize, sortBy, request);
-	}
-
-	@PostMapping("/AllActiveFood/{pn}/{ps}/{sortBy}")
-	public ResponseEntity<?> viewAllActiveFood(@PathVariable("pn") int pageNo, @PathVariable("ps") int pageSize,
-			@PathVariable String sortBy, @RequestBody AddFoodRequest request) {
-		return this.service.viewAllActiveFood(pageNo, pageSize, sortBy, request);
-	}
-
-	@PostMapping("/AllInActiveFood/{pn}/{ps}/{sortBy}")
-	public ResponseEntity<?> viewAllInActiveFood(@PathVariable("pn") int pageNo, @PathVariable("ps") int pageSize,
-			@PathVariable String sortBy, @RequestBody AddFoodRequest request) {
-		return this.service.viewAllInActiveFood(pageNo, pageSize, sortBy, request);
-	}
-	@PostMapping("/viewCategory/{pn}/{ps}/{sortBy}")
-	public ResponseEntity<?> viewAllGlobalCategory(@PathVariable("pn") int pageNo, @PathVariable("ps") int pageSize,
-			@PathVariable String sortBy, @RequestBody CategorySaveRequest request)
-	{
-		
-		return this.service.viewAllGlobalCategory(pageNo, pageSize, sortBy, request) ;
-	}
 	@PostMapping("/verify")	
 	public ResponseEntity<?> verificationOfDeliveryBoy(@RequestBody DeliveryBoyVerificationRequest d)
 	{
@@ -127,5 +74,20 @@ public class AdminController {
     {
     	return this.service.verificationOfRestaurant(id);
     }
-	
+    @GetMapping("/customer-list")
+	public ResponseEntity<?> listOfCustomer(@RequestParam(defaultValue = "0")int page,@RequestParam(defaultValue = "10")int size)
+	{
+		return this.service.getCustomerList(page, size);
+	}    
+    @GetMapping("/owner-list")
+   	public ResponseEntity<?> getOwnerList(@RequestParam(defaultValue = "0")int page,@RequestParam(defaultValue = "10")int size)
+   	{
+   		return this.service.getOwnerList(page, size);
+   	}  
+    @GetMapping("/owner-rest/{ownerId}")
+   	public ResponseEntity<?> getRestOfOwnerByOwnerId(@PathVariable String ownerId)
+   	{
+    	System.err.println(".....");
+   		return this.service.getAllRestaurantofOwnerId(ownerId);
+   	}   
 }

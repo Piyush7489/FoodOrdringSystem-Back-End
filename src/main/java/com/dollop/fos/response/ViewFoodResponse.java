@@ -1,27 +1,25 @@
 package com.dollop.fos.response;
 
+import java.time.LocalDateTime;
 
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Setter
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FoodResponse {
+public class ViewFoodResponse {
 
-	private Long foodId;
+	private String foodId;
 	private String foodName;
 	private Long foodPrice;
-	private String foodCreatedAt;
-	private String foodDescription;
+	private LocalDateTime foodCreatedAt;
 	private String imageName;
 	private Boolean isAvailable;
+	private String foodDescription;
 	private String foodCategoryName;
-	private String globalCategoryId;
-	
-	
+	private String foodRestaurantname;
+	private String ownerId;
+	private String restCategoryId;
 }

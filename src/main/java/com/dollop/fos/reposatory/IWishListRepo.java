@@ -11,7 +11,7 @@ public interface IWishListRepo extends JpaRepository<WishList, Long> {
 
 
 
-	@Query("SELECT w FROM WishList w WHERE w.costomer.userId=:userId AND w.food.foodId=:foodId  ")
+	@Query("SELECT w FROM WishList w WHERE w.costomer.userId=:userId AND w.food.foodId=:foodId")
 	List<WishList> findByUserIdAndFoodId(String userId, String foodId);
 
 	@Query("SELECT w FROM WishList w WHERE w.costomer.userId=:userId")
