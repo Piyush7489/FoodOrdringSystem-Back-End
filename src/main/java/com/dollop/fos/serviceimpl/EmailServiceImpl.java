@@ -22,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.dollop.fos.entity.RegisterOtp;
-import com.dollop.fos.entity.User;
 import com.dollop.fos.helper.AppConstant;
 import com.dollop.fos.reposatory.IRegisterOTPRepo;
 import com.dollop.fos.reposatory.IUserRepo;

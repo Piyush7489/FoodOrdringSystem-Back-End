@@ -1,10 +1,8 @@
 package com.dollop.fos.response;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import com.dollop.fos.NonNull;
-import com.dollop.fos.entity.Restaurant;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

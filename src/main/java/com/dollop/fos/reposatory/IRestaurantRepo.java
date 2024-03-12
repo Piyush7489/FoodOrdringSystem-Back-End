@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.dollop.fos.entity.Restaurant;
-import com.dollop.fos.response.ViewRestaurantOfOwnerByAdmin;
 
 public interface IRestaurantRepo extends JpaRepository<Restaurant, String> {
 
