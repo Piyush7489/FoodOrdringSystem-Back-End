@@ -56,6 +56,8 @@ public class ViewRestaurantResponse {
     private MultipartFile imageName;
 	private String fssaiLicenceNo;
 	private String gstLicenceNo;
+	private String fssaiLicencePhoto;
+	private String gstLicencePhoto;
 	
 	
 }

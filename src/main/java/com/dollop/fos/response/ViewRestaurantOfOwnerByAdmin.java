@@ -28,6 +28,7 @@ public class ViewRestaurantOfOwnerByAdmin {
     private String state;
     private String restContect;
     private String isApprove;
+    private String isBlocked;
     
 	
 }

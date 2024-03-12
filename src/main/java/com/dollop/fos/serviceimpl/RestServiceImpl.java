@@ -271,12 +271,13 @@ public class RestServiceImpl implements IRestaurantService {
 		// TODO Auto-generated method stub
 		Map<String,Object> response = new HashMap<>();
 		
-//		Restaurant r1 = this.repo.findByRestId(rest.getRestId());
-//		if(r1.getIsApprove().equals(AppConstant.UNVERIFIED)) 
-//		{
-//			response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.WAIT_FOR_APPROVAL_RESTAURANT);
-//			return ResponseEntity.status(HttpStatus.OK).body(response);
-//		}else if(r1.getIsBlocked().equals(AppConstant.UNBLOCK)) 
+		Restaurant r1 = this.repo.findByRestId(rest.getRestId());
+		if(r1.getIsApprove().equals(AppConstant.UNVERIFIED)) 
+		{
+			response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.WAIT_FOR_APPROVAL_RESTAURANT);
+			return ResponseEntity.status(HttpStatus.OK).body(response);
+		}
+//		else if(r1.getIsBlocked().equals(AppConstant.UNBLOCK)) 
 //		{
 //			response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.WAIT_FOR_APPROVAL_RESTAURANT);
 //			return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -355,7 +356,7 @@ public class RestServiceImpl implements IRestaurantService {
 		v.setFssaiLicenceNo(r.getFssaiLicense().getLicenseNumber());
 		v.setFssaiLicencePhoto(r.getFssaiLicense().getFssaiLicensePhoto());
 		v.setGstLicenceNo(r.getGstRegistration().getLicenseNumber());
-		v.setGstLicencePhoto(r.getFssaiLicense().getFssaiLicensePhoto());
+		v.setGstLicencePhoto(r.getGstRegistration().getGstlicensePhoto());
 		v.setIsActive(r.getIsActive());
 		v.setRestCloseTime(r.getRestCloseTime());
 		v.setRestContect(r.getRestAddress().getRestContect());
@@ -364,7 +365,8 @@ public class RestServiceImpl implements IRestaurantService {
 		v.setRestName(r.getRestName());
 		v.setRestDescription(r.getRestDescription());
 		v.setState(r.getRestAddress().getState());
-		v.setIsApprove(r.getIsApprove());		
+		v.setIsApprove(r.getIsApprove());	
+		v.setIsBlocked(r.getIsBlocked());
 		return v;
 	}
 
@@ -402,6 +404,8 @@ public class RestServiceImpl implements IRestaurantService {
 		v.setZipCode(r.getRestAddress().getZipCode());
 		v.setGstLicenceNo(r.getGstRegistration().getLicenseNumber());
 		v.setFssaiLicenceNo(r.getFssaiLicense().getLicenseNumber());
+		v.setFssaiLicencePhoto(r.getFssaiLicense().getFssaiLicensePhoto());
+		v.setGstLicencePhoto(r.getGstRegistration().getGstlicensePhoto());
 		System.err.println(v);
 		return v;
 	}
