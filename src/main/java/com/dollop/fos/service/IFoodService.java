@@ -7,8 +7,6 @@ import java.security.Principal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.dollop.fos.requests.UpdateFoodRequest;
-
 public interface IFoodService {
 
 	public ResponseEntity<?> addFood(String foodRequest,MultipartFile foodImage);

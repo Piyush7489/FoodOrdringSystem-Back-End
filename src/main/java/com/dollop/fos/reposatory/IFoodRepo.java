@@ -1,13 +1,10 @@
 package com.dollop.fos.reposatory;
 
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.dollop.fos.entity.Food;
-import com.dollop.fos.entity.RestaurantCategory;
 
 public interface IFoodRepo extends JpaRepository<Food, String> {
 

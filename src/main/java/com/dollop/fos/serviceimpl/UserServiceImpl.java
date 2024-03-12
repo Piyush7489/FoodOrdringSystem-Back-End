@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,19 +25,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.dollop.fos.customexceptions.ResourceFoundException;
-import com.dollop.fos.entity.Restaurant;
 import com.dollop.fos.entity.Role;
 import com.dollop.fos.entity.User;
 import com.dollop.fos.entity.UserRole;
 import com.dollop.fos.helper.AppConstant;
 import com.dollop.fos.helper.FolderName;
-import com.dollop.fos.reposatory.IRestaurantRepo;
 import com.dollop.fos.reposatory.IUserRepo;
 import com.dollop.fos.requests.ChangePasswordRequest;
 import com.dollop.fos.requests.SignupRequest;
 import com.dollop.fos.response.UserResponse;
 import com.dollop.fos.service.IUserService;
-import com.dollop.fos.utility.IImageService;
 @Service
 public class UserServiceImpl implements IUserService,UserDetailsService {
 
@@ -51,8 +47,8 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 	@Autowired
 	private ModelMapper modelmapper;
 	
-	@Autowired
-	private IRestaurantRepo restRepo;
+//	@Autowired
+//	private IRestaurantRepo restRepo;
 //	@Autowired
 //	private IImageService imageService;
 	
