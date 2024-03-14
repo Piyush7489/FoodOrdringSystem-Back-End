@@ -36,6 +36,7 @@ public class AuthController {
 	 
 	@PostMapping("/signup")
 	public ResponseEntity<?> saveUser(@RequestBody SignupRequest request) {
+		System.err.println("....");
 		return this.service.createUser(request);
 	}
  

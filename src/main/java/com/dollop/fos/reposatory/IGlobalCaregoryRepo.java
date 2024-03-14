@@ -33,6 +33,12 @@ public interface IGlobalCaregoryRepo extends JpaRepository<GlobalCategory, Strin
 
 	List<GlobalCategory> findByIsActiveIsTrue();
 	
-	 @Query("SELECT new com.dollop.fos.response.GlobalCategoryNameResponse(g.catId, g.catName) FROM RestaurantCategory rc JOIN GlobalCategory g ON rc.globalCategory.catId=g.catId  WHERE rc.restaurant.restId = :restaurantId")
-	    List<GlobalCategoryNameResponse> findCatIdAndCatNameByRestaurantId(@Param("restaurantId") String restaurantId);
+	@Query("SELECT new com.dollop.fos.response.GlobalCategoryNameResponse(g.catId, g.catName) FROM RestaurantCategory rc JOIN GlobalCategory g ON rc.globalCategory.catId=g.catId  WHERE rc.restaurant.restId = :restaurantId")
+	List<GlobalCategoryNameResponse> findCatIdAndCatNameByRestaurantId(@Param("restaurantId") String restaurantId);
+
+	@Query("SELECT gc FROM GlobalCategory gc  join RestaurantCategory rc ON gc.catId= rc.globalCategory.catId WHERE rc.restaurant.restId=:restId")
+	List<GlobalCategory> getAllCategoryOfRestaurant(String restId);
+
+	@Query("SELECT gc FROM GlobalCategory gc  LEFT JOIN RestaurantCategory rc ON gc.catId=rc.globalCategory.catId AND rc.restaurant.restId=:restId WHERE rc.restaurant.restId IS NULL")
+	List<GlobalCategory> getCategoryWhoNotExistThisRestaurantWhoIdIPass(String restId);
 }

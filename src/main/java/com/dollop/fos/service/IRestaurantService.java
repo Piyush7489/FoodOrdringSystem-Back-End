@@ -18,5 +18,7 @@ public interface IRestaurantService {
 	 public ResponseEntity<?> deleteRestaurant(String restId);
 	 public ResponseEntity<?> getRestaurauntNameAndCategoryofOwner(Principal p);
 	 public ResponseEntity<?> getRestaurantNameOfOWner(Principal p);
+	 public ResponseEntity<?> getCategoryOfRestaurant(String restId);
+	
 	
 }

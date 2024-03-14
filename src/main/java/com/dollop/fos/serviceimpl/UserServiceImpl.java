@@ -123,7 +123,9 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String useremail) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
+		System.err.println(useremail);
 		Optional<User> user = this.userRepo.getUserByName(useremail);
+		System.err.println(user.isEmpty());
 		if(user.isEmpty()) 
 		{
 			throw new ResourceFoundException(AppConstant.USER_NOT_FOUND);
