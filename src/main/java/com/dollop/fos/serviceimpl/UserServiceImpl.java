@@ -1,5 +1,6 @@
 package com.dollop.fos.serviceimpl;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.dollop.fos.customexceptions.ResourceFoundException;
 import com.dollop.fos.entity.Role;
@@ -33,8 +35,13 @@ import com.dollop.fos.helper.FolderName;
 import com.dollop.fos.reposatory.IUserRepo;
 import com.dollop.fos.requests.ChangePasswordRequest;
 import com.dollop.fos.requests.SignupRequest;
+import com.dollop.fos.requests.UserUpdateRequest;
 import com.dollop.fos.response.UserResponse;
 import com.dollop.fos.service.IUserService;
+import com.dollop.fos.utility.IImageService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class UserServiceImpl implements IUserService,UserDetailsService {
 
@@ -47,10 +54,10 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 	@Autowired
 	private ModelMapper modelmapper;
 	
-//	@Autowired
-//	private IRestaurantRepo restRepo;
-//	@Autowired
-//	private IImageService imageService;
+	@Autowired
+	private IImageService imageService;
+	@Autowired
+   private ObjectMapper mapper;
 	
 	
 	@Override
@@ -228,7 +235,76 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
+	@Override
+	public ResponseEntity<?> updateUser(String updateRequest, String userId, MultipartFile profilePhoto) {
+		// TODO Auto-generated method stub
+		Map<Object,Object> response = new HashMap<>();
+		UserUpdateRequest request=null;
+		try {
+			request = mapper.readValue(updateRequest, UserUpdateRequest.class);
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		User u = userUpdateReqToUser(request);
+		Optional<User> findById = this.userRepo.findById(userId);
+		
+		if (findById.isPresent() && findById.get().getEmail().equals(u.getEmail())) {
+			User user = findById.get();
+			u.setUserId(userId);
+			u.setCreateAt(user.getCreateAt());
+			u.setPassword(user.getPassword());
+			u.setUpdateAt(LocalDate.now());
+			u.setIsActive(true);
+			if(Objects.nonNull(profilePhoto))
+			{
+				String uploadImage;
+				try {
+					uploadImage = this.imageService.uploadImage(profilePhoto, FolderName.PROFILE_PHOTO);
+					System.err.println(uploadImage);
+					u.setProfilePhoto(uploadImage);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+//					e.printStackTrace();
+				}
+			}
+			else {
+				u.setProfilePhoto(findById.get().getProfilePhoto());
+			}
+			
+			u = this.userRepo.save(u);
+			if(Objects.nonNull(u))
+			{
+				UserResponse userResponse = setData(u);
+				response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.USER_UPDATE_SUCCESS);
+				response.put(AppConstant.DATA, userResponse);
+				return ResponseEntity.status(HttpStatus.OK).body(response);
+			}
+			else
+			{
+				response.put(AppConstant.ERROR, AppConstant.USER_UPDATE_FAILED);
+				return ResponseEntity.status(HttpStatus.OK).body(response);
+			}
+		} else {
+			response.put(AppConstant.ERROR, AppConstant.CANT_CHANGE_EMAIL);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+		}
+	}
 
+	public User userUpdateReqToUser(UserUpdateRequest uur)
+	{
+		User user = new User();
+		user.setFirstName(uur.getFirstName());
+		user.setLastName(uur.getLastName());
+		user.setTempAddress(uur.getTempAddress());
+		user.setEmail(uur.getEmail());
+		user.setMob(uur.getMob());
+		return user;
+	}
 	
 	
 	

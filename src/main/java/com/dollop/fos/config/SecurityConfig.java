@@ -41,6 +41,7 @@ public class SecurityConfig {
 			 "/api/v1/boy/register",
 			 "/api/v1/auth/check/{email}",
 			 "/api/v1/auth/new-pass/{email}/{pass}", 
+			 "/api/v1/auth/update-user/{userId}"
 	        };
    private String owner[]={
            "/api/v1/rest/save",
