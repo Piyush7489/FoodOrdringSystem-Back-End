@@ -131,6 +131,7 @@ public class AppConstant {
 	public static final Object INVALID_USER = "Invalid User...";
 	public static final Object PASSWORD_CHANGE = "Password Change Successfully..";
 	public static final Object REST_ALREADY_EXIST = "Restaurant Already Exist..!!";
+	public static Object CATEGORY_ADD_FAILURE="NOT ADD CATEGORY..!!";
 	
 
 	

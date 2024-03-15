@@ -89,6 +89,11 @@ public class RestaurantController {
    {
 	return this.service.getRestaurantNameOfOWner(p);   
    }
+   @GetMapping("/cat-of-rest/{restId}")
+   public ResponseEntity<?> getCategoryOfRestaurant(@PathVariable String restId)
+   {
+	   return this.service.getCategoryOfRestaurant(restId);
+   }
 }
 
 

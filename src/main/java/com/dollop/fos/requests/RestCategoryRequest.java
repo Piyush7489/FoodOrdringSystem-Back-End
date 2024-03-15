@@ -17,7 +17,7 @@ public class RestCategoryRequest {
 
 	 private String id;
 	
-//	 private String restaurant_id;
+	 private String restaurant_id;
 	 
 	 private String catId;
 	
