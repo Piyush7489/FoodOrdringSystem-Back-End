@@ -41,6 +41,7 @@ import com.dollop.fos.requests.FsseiLicenseRequest;
 import com.dollop.fos.requests.GstRegistrationRequest;
 import com.dollop.fos.requests.RestAddressRequest;
 import com.dollop.fos.requests.RestSaveRequest;
+import com.dollop.fos.response.GlobalCategoryResponse;
 import com.dollop.fos.response.RestNameResponse;
 import com.dollop.fos.response.RestaurantStatusCountResponse;
 import com.dollop.fos.response.ViewRestaurantOfOwnerByAdmin;
@@ -452,6 +453,7 @@ public class RestServiceImpl implements IRestaurantService {
 	}
 
 	@Override
+
 	public ResponseEntity<?> getRestaurantStatusCount() {
 		 Map<String, Long> counts = this.repo.getRestaurantStatusCounts();
 		 Map<String,Object> response = new HashMap<>();
@@ -478,5 +480,27 @@ public class RestServiceImpl implements IRestaurantService {
 	        statusCount.setTotalCount(map.get("totalCount")); 
 		return statusCount;
 	}
+
+
+	public ResponseEntity<?> getCategoryOfRestaurant(String restId) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		List<GlobalCategory> list = this.gRepo.getAllCategoryOfRestaurant(restId);
+	    List<GlobalCategoryResponse> viewList = list.stream().map(this::setDataCatToCatResponse).collect(Collectors.toList());
+		response.put(AppConstant.RESPONSE_MESSAGE, viewList);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	private  GlobalCategoryResponse setDataCatToCatResponse(GlobalCategory g) 
+	{
+		GlobalCategoryResponse v = new GlobalCategoryResponse();
+		v.setCatDescription(g.getCatDescription());
+		v.setCatId(g.getCatId());
+		v.setCatName(g.getCatName());
+		v.setCatImage(g.getCatImage());
+		return v;
+	}
+
+	
 
 }

@@ -56,7 +56,10 @@ public class SecurityConfig {
            "/api/v1/rest/view-owner-rest",
            "/api/v1/rest/get/{restId}",
            "/api/v1/rest/rest-name-of-owner",
-           "/api/v1/globalCategory/cat-name/{restId}"
+           "/api/v1/globalCategory/cat-name/{restId}",
+           "/api/v1/rest/cat-of-rest/{restId}",
+           "/api/v1/globalCategory/extra-cat-add/{restId}",
+           "/api/v1/globalCategory/add-category"
             };
    private String admin[]= {
 		                      "/api/v1/admin/RestaurantApprove/{restId}",

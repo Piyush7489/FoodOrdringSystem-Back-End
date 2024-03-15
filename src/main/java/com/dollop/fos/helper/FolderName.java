@@ -8,4 +8,5 @@ public class FolderName {
 	public static final String LICENSE = "licence";
 	public static final String VEHICLE = "vehicle";
 	public static final String IDENTITY_CARD = "identityCard";
+	public static final String CATEGORY_PHOTO = "FoodCategoryPhoto";
 }

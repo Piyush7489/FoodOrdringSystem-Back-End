@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.dollop.fos.reposatory.IRestaurantCategoryRepo;
 import com.dollop.fos.requests.GlobalCategoryRequest;
+import com.dollop.fos.requests.RestCategoryRequest;
 import com.dollop.fos.service.IGlobalCategoryService;
 @RestController
 @RequestMapping("/api/v1/globalCategory")
@@ -22,10 +25,12 @@ public class GlobalCategoryController {
 
 	@Autowired
 	private IGlobalCategoryService service;
+	
+	
 	@PostMapping("/save")
-	public ResponseEntity<?> createGlobalCategory(@RequestBody GlobalCategoryRequest request)
+	public ResponseEntity<?> createGlobalCategory(@RequestParam("category")String categoryRequest,@RequestParam(value = "catImage" ,required = false) MultipartFile catImage)
 	{
-		return this.service.createGlobalCategory(request);
+		return this.service.createGlobalCategory(categoryRequest,catImage);
 	}
 	@PutMapping("/update")
 	public ResponseEntity<?> updateGlobalCategory(@RequestBody GlobalCategoryRequest request)
@@ -63,4 +68,16 @@ public class GlobalCategoryController {
 	{
 		return this.service.getCategoryByRestId(restId);
 	}
+    @GetMapping("/extra-cat-add/{restId}")
+	public ResponseEntity<?>getAllCategoryWhoNotHaveThisRestaurant(@PathVariable String restId)
+	{
+		return this.service.getAllCategoryWhoNotHaveThisRestaurant(restId);
+	}
+    @PostMapping("/add-category")
+    public ResponseEntity<?> addCategoryInRestaurant(@RequestBody RestCategoryRequest request)
+    {
+    	return this.service.addCategoryInRestaurant(request);
+    }
+	
 }
+

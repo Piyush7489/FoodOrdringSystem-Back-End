@@ -24,6 +24,8 @@ public class GlobalCategoryResponse {
 	private String catDescription;
 	@NonNull
 	private Boolean isActive;
+	@NonNull
+	private String catImage;
 	
 
 }

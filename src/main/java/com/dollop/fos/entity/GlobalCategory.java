@@ -25,6 +25,7 @@ import lombok.Setter;
 		private String catName;
 		private String catDescription;
 		private Boolean isActive;
+		private String catImage;
 		@OneToMany(mappedBy = "globalCategory")
 		@JsonIgnore
 		private Set<RestaurantCategory> restCategory = new HashSet<>();

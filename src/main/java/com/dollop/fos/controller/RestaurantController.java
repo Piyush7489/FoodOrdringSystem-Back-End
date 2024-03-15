@@ -1,3 +1,4 @@
+
 package com.dollop.fos.controller;
 
 import java.security.Principal;
@@ -93,7 +94,11 @@ public class RestaurantController {
 	@GetMapping("/rest-status-count")
 	public ResponseEntity<?> getRestStausCounts()
 	{
-		System.err.println("HELLO");
 		return this.service.getRestaurantStatusCount();
 	}
 }
+
+ 
+
+
+
