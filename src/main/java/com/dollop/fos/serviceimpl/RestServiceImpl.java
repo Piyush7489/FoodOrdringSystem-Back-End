@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,6 +42,7 @@ import com.dollop.fos.requests.GstRegistrationRequest;
 import com.dollop.fos.requests.RestAddressRequest;
 import com.dollop.fos.requests.RestSaveRequest;
 import com.dollop.fos.response.RestNameResponse;
+import com.dollop.fos.response.RestaurantStatusCountResponse;
 import com.dollop.fos.response.ViewRestaurantOfOwnerByAdmin;
 import com.dollop.fos.response.ViewRestaurantResponse;
 import com.dollop.fos.service.IRestaurantService;
@@ -447,6 +449,34 @@ public class RestServiceImpl implements IRestaurantService {
 		rn.setRid(r.getRestId());
 		rn.setRName(r.getRestName());
 		return rn;
+	}
+
+	@Override
+	public ResponseEntity<?> getRestaurantStatusCount() {
+		 Map<String, Long> counts = this.repo.getRestaurantStatusCounts();
+		 Map<String,Object> response = new HashMap<>();
+		 if(Objects.nonNull(counts))
+		 {
+			 RestaurantStatusCountResponse chengeMapToStatusCountResponse = chengeMapToStatusCountResponse(counts);
+			 response.put(AppConstant.DATA, chengeMapToStatusCountResponse);
+			 return ResponseEntity.status(HttpStatus.OK).body(response);
+		 }
+		 
+		 response.put(AppConstant.ERROR,AppConstant.COUNT_OF_REST_STATUS_NOT_FOUND);
+		 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	}
+	
+	public RestaurantStatusCountResponse chengeMapToStatusCountResponse(Map<String,Long> map)
+	{
+		RestaurantStatusCountResponse statusCount = new RestaurantStatusCountResponse();
+		 	statusCount.setActiveCount(map.get("activeCount"));
+	        statusCount.setInactiveCount(map.get("inactiveCount")); 
+	        statusCount.setBlockedCount(map.get("blockedCount")); 
+	        statusCount.setUnblockedCount(map.get("unblockedCount")); 
+	        statusCount.setVerifiedCount(map.get("verifiedCount")); 
+	        statusCount.setUnverifiedCount(map.get("unverifiedCount")); 
+	        statusCount.setTotalCount(map.get("totalCount")); 
+		return statusCount;
 	}
 
 }

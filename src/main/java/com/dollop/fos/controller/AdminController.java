@@ -85,4 +85,10 @@ public class AdminController {
     	System.err.println(".....");
    		return this.service.getAllRestaurantofOwnerId(ownerId);
    	}   
+    
+    @GetMapping("/customer-boy-count")
+    public ResponseEntity<?> getCountOfCustomersAndBoy()
+    {
+    	return this.service.getCountOfCustomersAndBoy();
+    }
 }

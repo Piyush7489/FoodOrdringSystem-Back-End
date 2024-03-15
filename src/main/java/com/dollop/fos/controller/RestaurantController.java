@@ -31,30 +31,31 @@ public class RestaurantController {
 	private IRestaurantService service;
 
 	@PostMapping("/save")
-	public ResponseEntity<?> createRestaurant(RestSaveRequest rs,Principal p)
-	{
+	public ResponseEntity<?> createRestaurant(RestSaveRequest rs, Principal p) {
 
-        return this.service.addRestaurant(rs,p);
+		return this.service.addRestaurant(rs, p);
 	}
+
 	@GetMapping("/{id}/{status}")
-	public ResponseEntity<?> changeStatus(@PathVariable String id,@PathVariable boolean status)
-	{
+	public ResponseEntity<?> changeStatus(@PathVariable String id, @PathVariable boolean status) {
 		return this.service.changeStatus(id, status);
 	}
-	
+
 	@GetMapping("/dataOfRest")
-	public ResponseEntity<?> getdataofRestaurant(@RequestParam(defaultValue = "0")int page,@RequestParam(defaultValue = "10")int size)
-	{
-		return this.service.getDataofRestaurant(page,size);
-	}                                         
-   @PutMapping("/edit-rest")
-   public ResponseEntity<?> editRestaurant( @RequestParam("rest") String rest,Principal p,@RequestParam(value = "restimage",required = false) MultipartFile restimage)
-   {
-	  
-	    ObjectMapper o = new ObjectMapper();
-		ViewRestaurantResponse updateRequest=null;;
-	    try {
-			updateRequest = o.readValue(rest,ViewRestaurantResponse.class);
+	public ResponseEntity<?> getdataofRestaurant(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size) {
+		return this.service.getDataofRestaurant(page, size);
+	}
+
+	@PutMapping("/edit-rest")
+	public ResponseEntity<?> editRestaurant(@RequestParam("rest") String rest, Principal p,
+			@RequestParam(value = "restimage", required = false) MultipartFile restimage) {
+
+		ObjectMapper o = new ObjectMapper();
+		ViewRestaurantResponse updateRequest = null;
+		;
+		try {
+			updateRequest = o.readValue(rest, ViewRestaurantResponse.class);
 			updateRequest.setImageName(restimage);
 			System.err.println(updateRequest);
 		} catch (JsonMappingException e) {
@@ -64,37 +65,35 @@ public class RestaurantController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	 
-	   
-	   return this.service.editRestaurant(updateRequest, p);
-   }
-   @GetMapping("/view-owner-rest")
-   public ResponseEntity<?> viewOwnerRestaurant(Principal p)
-   {
-	  
-	   return this.service.viewRestaurantOfOwner(p);
-   } 
-   @GetMapping("/get/{restId}")
-   public ResponseEntity<?> viewRestByRestId(@PathVariable String restId)
-   {
-	   return this.service.getRestaurantByRestId(restId);
-   }
-   @DeleteMapping("/{restId}")
-   public ResponseEntity<?> deleteRestaurant(@PathVariable("restId") String restId)
-   {
-	   return this.service.deleteRestaurant(restId);
-   }
-   @GetMapping("/rest-name-of-owner")
-   public ResponseEntity<?> getRestnameOfOwners(Principal p)
-   {
-	return this.service.getRestaurantNameOfOWner(p);   
-   }
+
+		return this.service.editRestaurant(updateRequest, p);
+	}
+
+	@GetMapping("/view-owner-rest")
+	public ResponseEntity<?> viewOwnerRestaurant(Principal p) {
+
+		return this.service.viewRestaurantOfOwner(p);
+	}
+
+	@GetMapping("/get/{restId}")
+	public ResponseEntity<?> viewRestByRestId(@PathVariable String restId) {
+		return this.service.getRestaurantByRestId(restId);
+	}
+
+	@DeleteMapping("/{restId}")
+	public ResponseEntity<?> deleteRestaurant(@PathVariable("restId") String restId) {
+		return this.service.deleteRestaurant(restId);
+	}
+
+	@GetMapping("/rest-name-of-owner")
+	public ResponseEntity<?> getRestnameOfOwners(Principal p) {
+		return this.service.getRestaurantNameOfOWner(p);
+	}
+
+	@GetMapping("/rest-status-count")
+	public ResponseEntity<?> getRestStausCounts()
+	{
+		System.err.println("HELLO");
+		return this.service.getRestaurantStatusCount();
+	}
 }
-
-
-
-
- 
-
-
-
