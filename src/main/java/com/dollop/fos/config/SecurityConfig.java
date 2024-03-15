@@ -80,7 +80,9 @@ public class SecurityConfig {
 		                      "/api/v1/admin/RestaurantReject/{restId}",
 		                      "/api/v1/admin/customer-list",
 		                      "/api/v1/admin/owner-list",
-		                      "/api/v1/admin/owner-rest/{ownerId}"
+		                      "/api/v1/admin/owner-rest/{ownerId}",
+		                      "/api/v1/admin/customer-boy-count",
+		                      "/api/v1/rest/rest-status-count"
                             };
    
  
@@ -114,8 +116,8 @@ public class SecurityConfig {
 		.disable()
 		.authorizeRequests()
 		.requestMatchers(permitAll).permitAll()
-		.requestMatchers(owner).hasAuthority("OWNER")
 		.requestMatchers(admin).hasAuthority("ADMIN")
+		.requestMatchers(owner).hasAuthority("OWNER")
 		.requestMatchers(customer).hasAuthority("CUSTOMER")
 		.requestMatchers(boy).hasAuthority("BOY")
 		.anyRequest().authenticated()

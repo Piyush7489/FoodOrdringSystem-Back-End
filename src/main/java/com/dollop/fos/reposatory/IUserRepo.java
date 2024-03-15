@@ -28,15 +28,22 @@ public interface IUserRepo extends JpaRepository<User, String> {
 
 	@Query("SELECT NEW map(u.email as email, r.roleName as roleName) FROM User u LEFT JOIN u.userRole ur LEFT JOIN ur.role r WHERE u.email = :email")
 	List<Map<String, Object>> findUserEmailAndRoleNameByEmail(@Param("email") String email);
-	
-	@Query("SELECT r.roleName " +
-	           "FROM User u " +
-	           "JOIN u.userRole ur " +
-	           "JOIN Role r ON ur.role.roleId = r.roleId " +
-	           "WHERE u.email = :email")
-	    String findRoleNameByEmail(@Param("email") String email);
 
-	 @Query("SELECT u FROM User u INNER JOIN UserRole ur ON u.userId = ur.user.userId INNER JOIN Role r ON ur.role.roleId = r.roleId WHERE r.roleName = :roleName")
-	    Page<User> findByRoleName(@Param("roleName") String roleName, Pageable pageable);
+	@Query("SELECT r.roleName " + "FROM User u " + "JOIN u.userRole ur " + "JOIN Role r ON ur.role.roleId = r.roleId "
+			+ "WHERE u.email = :email")
+	String findRoleNameByEmail(@Param("email") String email);
+
+	@Query("SELECT u FROM User u INNER JOIN UserRole ur ON u.userId = ur.user.userId INNER JOIN Role r ON ur.role.roleId = r.roleId WHERE r.roleName = :roleName")
+	Page<User> findByRoleName(@Param("roleName") String roleName, Pageable pageable);
+
+	@Query("SELECT SUM(CASE WHEN r.roleName = 'CUSTOMER' THEN 1 ELSE 0 END) AS customerCount, \r\n"
+			+ "       SUM(CASE WHEN r.roleName = 'BOY' THEN 1 ELSE 0 END) AS boyCount, \r\n"
+			+ "       SUM(CASE WHEN r.roleName = 'OWNER' THEN 1 ELSE 0 END) AS ownerCount, \r\n"
+			+ "       COUNT(u) AS totalCountOfUser \r\n"
+			+ "FROM User u \r\n"
+			+ "JOIN u.userRole ur \r\n"
+			+ "JOIN ur.role r \r\n"
+			+ "WHERE r.roleName IN ('CUSTOMER', 'BOY','OWNER')")
+	public Map<String,Long> getCountOfCustomerAndBoy();
 
 }
