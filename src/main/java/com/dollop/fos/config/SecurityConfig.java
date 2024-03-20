@@ -33,6 +33,7 @@ public class SecurityConfig {
 	private SecurityFilter securityfilter;
    
    private String permitAll[]= {
+		   "/api/v1/review/list-of-review",
 			"/api/v1/auth/signup",
 			"/api/v1/auth/login",
 			"/api/v1/otp/checkOTP",
@@ -41,7 +42,9 @@ public class SecurityConfig {
 			 "/api/v1/boy/register",
 			 "/api/v1/auth/check/{email}",
 			 "/api/v1/auth/new-pass/{email}/{pass}", 
-			 "/api/v1/auth/update-user/{userId}"
+			 "/api/v1/auth/update-user/{userId}",
+			 "/api/v1/review/list-of-review-by-restId/{restId}",
+			
 	        };
    private String owner[]={
            "/api/v1/rest/save",
@@ -82,14 +85,18 @@ public class SecurityConfig {
 		                      "/api/v1/admin/owner-list",
 		                      "/api/v1/admin/owner-rest/{ownerId}",
 		                      "/api/v1/admin/customer-boy-count",
-		                      "/api/v1/rest/rest-status-count"
+		                      "/api/v1/rest/rest-status-count",
+		                      "/api/v1/admin/all-boy-list",
+		                      "/api/v1/review/delete-review-by-admin/{reviewId}",
                             };
    
  
    private String customer[]= {
 		                        "/api/v1/wish/add",
 		                        "/api/v1/wish/view",
-		                        "/api/v1/wish/remove/{foodId}"
+		                        "/api/v1/wish/remove/{foodId}",
+		                        "/api/v1/review/create-review",
+		                        "/api/v1/review/delete-review-by-customer/{reviewId}",
 	                          };
    private String boy[]= { 
 		                    

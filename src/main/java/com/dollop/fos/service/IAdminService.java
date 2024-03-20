@@ -17,8 +17,8 @@ public interface IAdminService {
 	public ResponseEntity<?> verificationOfRestaurant(String id);
 	public ResponseEntity<?> getCustomerList(int page,int size);
 	public ResponseEntity<?> getOwnerList(int page,int size);
-	public ResponseEntity<?> getAllDeliveryBoyList(int page,int size);
 	public ResponseEntity<?> getAllRestaurantofOwnerId(String ownerId);
+	public ResponseEntity<?> getAllDeliveryBoy(Integer page,Integer size);
 	
 	public ResponseEntity<?> getCountOfCustomersAndBoy();
 }

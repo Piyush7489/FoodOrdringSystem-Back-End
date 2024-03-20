@@ -322,11 +322,7 @@ public class AdminServiceImpl implements IAdminService {
 		return v;
 	}
 
-	@Override
-	public ResponseEntity<?> getAllDeliveryBoyList(int page, int size) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public ResponseEntity<?> getCountOfCustomersAndBoy() {
@@ -348,6 +344,20 @@ public class AdminServiceImpl implements IAdminService {
 		response.setOwnerCount(map.get("ownerCount"));
 		response.setTotalCountOfUser(map.get("totalCountOfUser"));
 		return response;
+	}
+
+	@Override
+	public ResponseEntity<?> getAllDeliveryBoy(Integer page,Integer size) {
+		// TODO Auto-generated method stub
+		Map<String, Object> response = new HashMap<>();
+		Pageable pageable = PageRequest.of(page, size);
+		Page<User> boy = this.urepo.findByRoleName("BOY", pageable);
+
+		List<OwnerResponse> boyList = boy.getContent().stream().map(this::ownerToOwnerResponse)
+				.collect(Collectors.toList());
+		Page page1 = new PageImpl<>(boyList, pageable, boy.getTotalElements());
+		response.put(AppConstant.RESPONSE_MESSAGE, page1);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
 }
