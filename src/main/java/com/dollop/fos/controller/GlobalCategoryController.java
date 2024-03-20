@@ -30,6 +30,7 @@ public class GlobalCategoryController {
 	@PostMapping("/save")
 	public ResponseEntity<?> createGlobalCategory(@RequestParam("category")String categoryRequest,@RequestParam(value = "catImage" ,required = false) MultipartFile catImage)
 	{
+		System.err.println(catImage);
 		return this.service.createGlobalCategory(categoryRequest,catImage);
 	}
 	@PutMapping("/update")
@@ -40,6 +41,7 @@ public class GlobalCategoryController {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getGlobalCategoryById(@PathVariable String id)
 	{
+		System.err.println("...");
 		return this.service.getGlobalCategoryById(id);
 	}
 	@DeleteMapping("/{id}")
@@ -73,11 +75,15 @@ public class GlobalCategoryController {
 	{
 		return this.service.getAllCategoryWhoNotHaveThisRestaurant(restId);
 	}
-    @PostMapping("/add-category")
+    @PostMapping("/")
     public ResponseEntity<?> addCategoryInRestaurant(@RequestBody RestCategoryRequest request)
     {
     	return this.service.addCategoryInRestaurant(request);
     }
-	
+	@DeleteMapping("/removeCat/{restId}/{categoryId}")
+    public ResponseEntity<?> removeCategoryFromRestaurant(@PathVariable String restId,@PathVariable String categoryId)
+    {
+    	return this.service.removeCategoryFromRestaurant(restId, categoryId);
+    }
 }
 

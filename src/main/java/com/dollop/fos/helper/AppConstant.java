@@ -27,8 +27,13 @@ public class AppConstant {
 	public static final String CATEGORY__FOUND = "Category Already Exist...!!";
 //	public static final String ORDER_NOT_FOUND = "Order Not Found..!!";
 	public static final String MSG_EXCEPTION = "Exception in progress...!!";
+
+//	public static final String REVIEW_DELETED = "Review Deleted Successfully...!!";
+	public static final String DELETE_SUCCESS = "Delete Suceesfull...!!";
+
 	public static final String REVIEW_DELETED = "Review Deleted Successfully...!!";
 //	public static final String DELETE_SUCCESS = "Delete Suceesfull...!!";
+
 //	public static final String NOT_DELETE = "Not Deleted...!!";
 //	
 	public static final String RESPONSE_MESSAGE = "message";
@@ -103,6 +108,7 @@ public class AppConstant {
 	public static final String PROFILEFOLDER = "userPofile";
 	public static final String UNVERIFIED = "Unverified";
 	public static final String REST_CURR_CLOSE = "Closed";
+	public static final String REST_CURR_OPEN="Opened";
 	public static final String VERIFIED = "Verified";
 	public static final Object ALREADY_VERIFIED = "Restaurant Already Verified..!!";
 	public static final Object RESTAURANT_VERIFIED_SUCCESSFULLY = "Restaurant Verified SuccessFully..!!";
@@ -134,7 +140,12 @@ public class AppConstant {
 
 	public static final Object COUNT_OF_REST_STATUS_NOT_FOUND = "Restaurant Count Not Found..!!";
 	public static final Object COUNT_OF_CUSTOMER_AND_BOY_NOT_FOUND = "Users Count Not Found..!!";
+
+	public static final Object REST_CUR_STATUS_CHANGE = "Restaurant Current Status Change Success..!!";
+
+
 	public static Object SOMEONES_REVIEW="You Can't delete other's review..!!";
+
 	public static Object CATEGORY_ADD_FAILURE="NOT ADD CATEGORY..!!";
 	
 

@@ -160,7 +160,8 @@ public class GlobalCategoryServiceImpl implements IGlobalCategoryService{
 		// TODO Auto-generated method stub
 		Map<String,Object> response = new HashMap<>();
 		GlobalCategory g = this.repo.findWithId(id);
-		this.repo.delete(g);
+		g.setIsActive(false);
+		this.repo.save(g);
 		response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.CATEGORY_DELETE_SUCCESS);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
@@ -241,6 +242,17 @@ public class GlobalCategoryServiceImpl implements IGlobalCategoryService{
 		rc.setRestaurant(r);
 		rc.setId(UUID.randomUUID().toString());
 		return rc;
+	}
+
+
+	@Override
+	public ResponseEntity<?> removeCategoryFromRestaurant(String restId, String categoryId) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		RestaurantCategory rc = this.rcRepo.findByRestCatId(restId,categoryId);
+		this.rcRepo.delete(rc);
+		response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.CATEGORY_DELETE_SUCCESS);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
 	

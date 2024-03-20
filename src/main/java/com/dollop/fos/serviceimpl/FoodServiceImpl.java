@@ -108,7 +108,7 @@ public class FoodServiceImpl implements IFoodService {
 				 .collect(Collectors.toList());
 		 if(viewFoodResponse.isEmpty()) 
 		 {
-			 response.put(AppConstant.RESPONSE_MESSAGE, null);
+			    response.put(AppConstant.RESPONSE_MESSAGE, null);
 		        return ResponseEntity.status(HttpStatus.OK).body(response);
 		 }
 		 Page<ViewFoodResponse> pageResponse = new PageImpl<>(viewFoodResponse, pageable, food.getTotalElements());
@@ -128,9 +128,7 @@ public class FoodServiceImpl implements IFoodService {
 		RestaurantCategory rc = f.getRestCategory();
 		v.setRestCategoryId(rc.getId());
 		Restaurant r = rc.getRestaurant();
-		
 		GlobalCategory g = rc.getGlobalCategory();
-		
 		v.setFoodCategoryName(g.getCatName());
 		v.setFoodRestaurantname(r.getRestName());
 		v.setOwnerId(r.getOwner().getUserId());

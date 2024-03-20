@@ -418,6 +418,8 @@ public class RestServiceImpl implements IRestaurantService {
 		Map<String,Object> response = new HashMap<>();
 		Restaurant r = this.repo.findByRestId(restId);
 		r.setIsActive(false);
+		r.setCurrentStatus(AppConstant.REST_CURR_CLOSE);
+		this.repo.save(r);
 		response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.RESTAURANT_DELETE_SUCCESS);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
@@ -499,6 +501,25 @@ public class RestServiceImpl implements IRestaurantService {
 		v.setCatImage(g.getCatImage());
 		return v;
 	}
+
+	@Override
+	public ResponseEntity<?> restaurantCurrentStatusChange(String restId, Boolean status) {
+		// TODO Auto-generated method stub
+		Map<String,Object> response = new HashMap<>();
+		Restaurant r = this.repo.findByRestId(restId);
+		if(status) 
+		{
+			r.setCurrentStatus(AppConstant.REST_CURR_OPEN);
+		}
+		else 
+		{
+			r.setCurrentStatus(AppConstant.REST_CURR_CLOSE);
+		}
+		this.repo.save(r);
+		response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.REST_CUR_STATUS_CHANGE);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
 
 	
 

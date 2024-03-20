@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -73,6 +74,7 @@ public class RestaurantController {
 	@GetMapping("/view-owner-rest")
 	public ResponseEntity<?> viewOwnerRestaurant(Principal p) {
 
+		System.err.println("....");
 		return this.service.viewRestaurantOfOwner(p);
 	}
 
@@ -96,6 +98,20 @@ public class RestaurantController {
 	{
 		return this.service.getRestaurantStatusCount();
 	}
+	@GetMapping("/{restId}")
+	 public ResponseEntity<?> getCategoryOfRestaurant(@PathVariable String restId)
+   {
+		   return this.service.getCategoryOfRestaurant(restId);
+   }
+	@GetMapping("/cur/{restId}/{status}")
+	public ResponseEntity<?> currentStatusChangeOfRestaurant(@PathVariable String restId,@PathVariable Boolean status)
+	{
+		return this.service.restaurantCurrentStatusChange(restId, status);
+	}
+	
+	
+	
+	
 }
 
  

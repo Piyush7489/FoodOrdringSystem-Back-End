@@ -60,9 +60,12 @@ public class SecurityConfig {
            "/api/v1/rest/get/{restId}",
            "/api/v1/rest/rest-name-of-owner",
            "/api/v1/globalCategory/cat-name/{restId}",
-           "/api/v1/rest/cat-of-rest/{restId}",
            "/api/v1/globalCategory/extra-cat-add/{restId}",
-           "/api/v1/globalCategory/add-category"
+           "/api/v1/globalCategory/",
+           "/api/v1/rest/cur/{restId}/{status}",
+           "/api/v1/rest/{restId}",
+           "/api/v1/globalCategory/removeCat/{restId}/{categoryId}"
+           
             };
    private String admin[]= {
 		                      "/api/v1/admin/RestaurantApprove/{restId}",
@@ -86,8 +89,11 @@ public class SecurityConfig {
 		                      "/api/v1/admin/owner-rest/{ownerId}",
 		                      "/api/v1/admin/customer-boy-count",
 		                      "/api/v1/rest/rest-status-count",
-		                      "/api/v1/admin/all-boy-list",
+
+		                      "/api/v1/admin/view-all-food"
+            "/api/v1/admin/all-boy-list",
 		                      "/api/v1/review/delete-review-by-admin/{reviewId}",
+
                             };
    
  

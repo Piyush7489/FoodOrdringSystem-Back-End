@@ -138,7 +138,7 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 			throw new ResourceFoundException(AppConstant.USER_NOT_FOUND);
 		}	
 		user.get().getUserRole().stream().forEach(ur->{
-			System.err.println(ur.getRole().getRoleName()+"????");
+			System.err.println(ur.getRole().getRoleName());
 		});
 		List<GrantedAuthority> authorities = user.get().getUserRole().stream().map(role->new SimpleGrantedAuthority(role.getRole().getRoleName())).collect(Collectors.toList());
             return new org.springframework.security.core.userdetails.User(useremail, user.get().getPassword(), authorities);
