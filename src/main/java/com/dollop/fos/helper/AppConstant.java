@@ -14,7 +14,7 @@ public class AppConstant {
 //	public static final String TABLE_ALREADY_EXIST = "Table Already Exists...!!";
 //	public static final String TABLE_NOT_FOUND = "Table Not Found...!!";
 //	public static final String TABLE_NO_EXIST = "This No Table Already Exist take anoher no...!!";
-//	public static final String REVIEW_NOT_FOUND = "Review Not Found...!!";
+	public static final String REVIEW_NOT_FOUND = "Reviews and Rating Not Found...!!";
 //	public static final String CUSTOMER_NOT_FOUND = "Customer Not Found...!!";
 //	public static final String CART_EXIST = "This User Cart Already Exist...!!";
 //	public static final String CART_ISEMPTY = "Your Cart Is Empty...!!";
@@ -27,7 +27,7 @@ public class AppConstant {
 	public static final String CATEGORY__FOUND = "Category Already Exist...!!";
 //	public static final String ORDER_NOT_FOUND = "Order Not Found..!!";
 	public static final String MSG_EXCEPTION = "Exception in progress...!!";
-//	public static final String REVIEW_DELETED = "Review Deleted Successfully...!!";
+	public static final String REVIEW_DELETED = "Review Deleted Successfully...!!";
 //	public static final String DELETE_SUCCESS = "Delete Suceesfull...!!";
 //	public static final String NOT_DELETE = "Not Deleted...!!";
 //	
@@ -134,8 +134,9 @@ public class AppConstant {
 
 	public static final Object COUNT_OF_REST_STATUS_NOT_FOUND = "Restaurant Count Not Found..!!";
 	public static final Object COUNT_OF_CUSTOMER_AND_BOY_NOT_FOUND = "Users Count Not Found..!!";
-
+	public static Object SOMEONES_REVIEW="You Can't delete other's review..!!";
 	public static Object CATEGORY_ADD_FAILURE="NOT ADD CATEGORY..!!";
+	
 
 	
 

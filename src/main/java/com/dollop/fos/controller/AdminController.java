@@ -91,4 +91,10 @@ public class AdminController {
     {
     	return this.service.getCountOfCustomersAndBoy();
     }
+    
+    @GetMapping("/all-boy-list")
+    public ResponseEntity<?> getAllDeliveryBoy(@RequestParam(defaultValue = "0")int page,@RequestParam(defaultValue = "10")int size)
+    {
+    	return this.service.getAllDeliveryBoy(page, size);
+    }
 }
