@@ -20,8 +20,10 @@ import org.springframework.stereotype.Service;
 import com.dollop.fos.entity.Food;
 import com.dollop.fos.entity.GlobalCategory;
 import com.dollop.fos.entity.Restaurant;
+import com.dollop.fos.entity.RestaurantCategory;
 import com.dollop.fos.entity.User;
 import com.dollop.fos.helper.AppConstant;
+import com.dollop.fos.reposatory.IFoodRepo;
 import com.dollop.fos.reposatory.IGlobalCaregoryRepo;
 import com.dollop.fos.reposatory.IRestaurantRepo;
 import com.dollop.fos.reposatory.IUserRepo;
@@ -47,6 +49,8 @@ public class AdminServiceImpl implements IAdminService {
 	private IGlobalCaregoryRepo grepo;
 	@Autowired
 	private IUserRepo urepo;
+	@Autowired
+	private IFoodRepo fRepo;
 
 	@Override
 	public ResponseEntity<?> verifyRestaurant(String restId) {
@@ -268,9 +272,7 @@ public class AdminServiceImpl implements IAdminService {
 		Map<String, Object> response = new HashMap<>();
 		Pageable pageable = PageRequest.of(page, size);
 		Page<User> owner = this.urepo.findByRoleName("OWNER", pageable);
-
-		List<OwnerResponse> ownerList = owner.getContent().stream().map(this::ownerToOwnerResponse)
-				.collect(Collectors.toList());
+		List<OwnerResponse> ownerList = owner.getContent().stream().map(this::ownerToOwnerResponse).collect(Collectors.toList());
 		Page page1 = new PageImpl<>(ownerList, pageable, owner.getTotalElements());
 		response.put(AppConstant.RESPONSE_MESSAGE, page1);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -348,6 +350,38 @@ public class AdminServiceImpl implements IAdminService {
 		response.setOwnerCount(map.get("ownerCount"));
 		response.setTotalCountOfUser(map.get("totalCountOfUser"));
 		return response;
+	}
+
+
+	public ResponseEntity<?> getAllFood(int page, int size) {
+	    Map<String, Object> response = new HashMap<>();
+	    Pageable pageable = PageRequest.of(page, size);
+	    Page<Food> foodPage = fRepo.findAll(pageable);
+	    List<Food> foodList = foodPage.getContent();
+	    List<FoodResponse> foodResponseList = foodList.stream()
+	            .map(this::fooodToviewFoodResponse)
+	            .collect(Collectors.toList());
+	    response.put(AppConstant.RESPONSE_MESSAGE, foodResponseList);
+	    response.put("totalItems", foodPage.getTotalElements());
+	    return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+	private FoodResponse fooodToviewFoodResponse(Food r) 
+	{
+		FoodResponse f = new FoodResponse();
+		f.setFoodId(r.getFoodId());
+		f.setFoodName(r.getFoodName());
+		f.setFoodCreatedAt(r.getFoodCreatedAt());
+		f.setFoodDescription(r.getFoodDescription());
+		f.setFoodPrice(r.getFoodPrice());
+		f.setImageName(r.getImageName());
+		f.setIsAvailable(r.getIsAvailable());
+		RestaurantCategory rc = r.getRestCategory();
+        Restaurant r1 = rc.getRestaurant();
+        GlobalCategory c1 = rc.getGlobalCategory();
+        f.setFoodCategoryName(c1.getCatName());
+        f.setRestName(r1.getRestName());
+        f.setOwnerName(r1.getOwner().getEmail());
+        return f;
 	}
 
 }

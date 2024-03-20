@@ -42,7 +42,6 @@ public class Restaurant {
 	private String isApprove;
 	private String restImageName;
 	private String isBlocked;
-
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "rest_address_id")
 	private RestAddress restAddress;
@@ -63,5 +62,4 @@ public class Restaurant {
 	@OneToMany(mappedBy = "restaurant")
 	@JsonIgnore
 	private List<RestaurantCategory> restCategory = new ArrayList<>();
-
 }

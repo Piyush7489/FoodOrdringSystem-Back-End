@@ -18,4 +18,5 @@ public interface IGlobalCategoryService {
 	public ResponseEntity<?> getCategoryByRestId(String restId);
 	public ResponseEntity<?> getAllCategoryWhoNotHaveThisRestaurant(String restId);
 	public ResponseEntity<?> addCategoryInRestaurant(RestCategoryRequest request);
+	public ResponseEntity<?> removeCategoryFromRestaurant(String restId,String categoryId);
 }

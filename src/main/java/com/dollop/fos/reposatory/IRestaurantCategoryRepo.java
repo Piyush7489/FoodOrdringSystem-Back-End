@@ -13,4 +13,5 @@ public interface IRestaurantCategoryRepo extends JpaRepository<RestaurantCategor
 	@Query("SELECT rc FROM RestaurantCategory rc WHERE rc.restaurant.restId=:restaurantId AND rc.globalCategory.catId=:globalCategoryId")
 	RestaurantCategory findByRestCatId(String restaurantId, String globalCategoryId);
 
+	
 }

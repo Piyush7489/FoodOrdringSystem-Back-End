@@ -22,7 +22,7 @@ public interface IRestaurantRepo extends JpaRepository<Restaurant, String> {
 	@Query("SELECT r FROM Restaurant r WHERE r.owner.userId=:ownerId AND r.isApprove=:verified")
 	public List<Restaurant> getApproveRestaurantByOwnerId(String ownerId,String verified);
 
-	@Query("SELECT r FROM Restaurant r WHERE r.owner.userId=:ownerId")
+	@Query("SELECT r FROM Restaurant r WHERE r.owner.userId=:ownerId AND r.isActive=true")
 	public List<Restaurant> getRestaurantByOwnerId(String ownerId);
 	
 	Optional<Restaurant> findByRestNameAndRestIdNot(String restName, String restId);

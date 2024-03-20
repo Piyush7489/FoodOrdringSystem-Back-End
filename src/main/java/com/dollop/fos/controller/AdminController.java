@@ -91,4 +91,9 @@ public class AdminController {
     {
     	return this.service.getCountOfCustomersAndBoy();
     }
+    @GetMapping("/view-all-food")
+    public ResponseEntity<?> getAllFood(@RequestParam(defaultValue = "0")int page,@RequestParam(defaultValue = "10")int size)
+    {
+    	return this.service.getAllFood(page,size);
+    }
 }
